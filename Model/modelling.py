@@ -39,7 +39,7 @@ def eda(text, num_aug=4):
     return augmented_sentences
 
 # Load and augment data
-df = pd.read_csv("dataset_cleaned.csv")
+df = pd.read_csv("data/dataset_cleaned.csv")
 df = df.dropna(subset=["clean_text", "hoax"])
 df['hoax'] = df['hoax'].astype(int)
 
