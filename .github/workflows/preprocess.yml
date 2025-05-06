@@ -33,4 +33,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: processed-dataset
-        path: "Experiment/preprocessing/dataset_cleaned.csv"
+        path: Experiment/preprocessing/dataset_cleaned.csv
