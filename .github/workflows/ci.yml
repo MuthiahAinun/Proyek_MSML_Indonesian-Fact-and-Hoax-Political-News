@@ -8,6 +8,7 @@ on:
       - 'Model/conda.yaml'
       - 'Model/train_and_log.py'  # Tambahkan file yang terkait dengan training
       - 'Model/inference.py'  # Jika ada update pada inference
+      - 'requirements.txt'
 
 jobs:
   build:
