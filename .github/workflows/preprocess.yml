@@ -30,7 +30,7 @@ jobs:
         python Experiment/preprocessing/automate_Tsamarah-Muthiah-Abdullah.py
 
     - name: Upload processed dataset artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@c7d7c0dd2439cd5b4ec7d5521b53d6b3918db901
       with:
         name: processed-dataset
         path: Experiment/preprocessing/dataset_cleaned.csv"
