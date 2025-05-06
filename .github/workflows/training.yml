@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'Model/train_and_log.py'
+      - 'requirements.txt'
   workflow_dispatch:
 
 jobs:
