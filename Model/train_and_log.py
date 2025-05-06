@@ -12,7 +12,7 @@ import mlflow.pytorch
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # 2. Load & augment dataset
-df = load_and_augment_dataset("dataset_cleaned.csv")
+df = load_and_augment_dataset("data/dataset_cleaned.csv")
 
 # 3. Tokenisasi dan Dataset
 encodings, labels, tokenizer = tokenize_data(df)
