@@ -1,0 +1,15 @@
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+transformers
+datasets
+mlflow
+prometheus_client
+torch
+wordcloud
+tqdm
+nltk
+mlflow
+flask
