@@ -6,9 +6,10 @@ on:
       - '.github/workflows/ci.yaml'
       - 'Model/MLProject'
       - 'Model/conda.yaml'
-      - 'Model/train_and_log.py'  # Tambahkan file yang terkait dengan training
-      - 'Model/inference.py'  # Jika ada update pada inference
+      - 'Model/train_and_log.py'
+      - 'Model/inference.py'
       - 'requirements.txt'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -16,24 +17,18 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v2
         with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt  # Menggunakan requirements.txt daripada install manual
-
-      - name: Set up Conda environment
-        run: |
-          conda env create -f Model/conda.yaml
-          conda activate hoax-detection
+          auto-update-conda: true
+          environment-file: Model/conda.yaml
+          activate-environment: hoax-detection-env  # ini harus sama dengan 'name:' di conda.yaml
+          python-version: 3.10
 
       - name: Run MLflow Project
+        shell: bash -l {0}  # penting agar conda env aktif
         run: |
           mlflow run . --experiment-name hoax-detection --epochs 3 --batch_size 16
 
@@ -41,4 +36,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mlflow-artifacts
-          path: mlruns  # Upload artifacts dari folder mlruns yang digunakan oleh MLflow
+          path: mlruns
