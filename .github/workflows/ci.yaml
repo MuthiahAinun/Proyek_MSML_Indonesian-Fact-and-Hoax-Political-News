@@ -28,11 +28,11 @@ jobs:
           python-version: 3.9
 
       - name: Run MLflow Project
-        shell: bash -l {0}  # ini memastikan shell yang digunakan mendukung perintah 'conda activate'
-        run: |
-        source ~/miniconda3/etc/profile.d/conda.sh  # pastikan path ini sesuai dengan lokasi instalasi Miniconda
-        conda activate hoax-detection  # aktifkan environment Conda
-        mlflow run . --experiment-name hoax-detection --epochs 3 --batch_size 16
+        shell: bash # ini memastikan shell yang digunakan mendukung perintah 'conda activate'
+        run:  |
+          source /usr/share/miniconda/etc/profile.d/conda.sh
+          conda activate hoax-detection  # aktifkan environment Conda
+          mlflow run . --experiment-name hoax-detection --epochs 3 --batch_size 16
 
 
       - name: Upload MLflow artifacts
