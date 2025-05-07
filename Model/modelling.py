@@ -18,8 +18,9 @@ def random_deletion(words, p=0.1):
 def random_swap(words, n=1):
     new_words = words.copy()
     if len(new_words) < 2:
-        return new_words  # skip if too short for swapping
-    for _ in range(n):
+        return new_words  # skip swap if too short
+    num_swaps = min(n, len(new_words) // 2)  # limit swaps to half the size of words
+    for _ in range(num_swaps):
         idx1, idx2 = random.sample(range(len(new_words)), 2)
         new_words[idx1], new_words[idx2] = new_words[idx2], new_words[idx1]
     return new_words
