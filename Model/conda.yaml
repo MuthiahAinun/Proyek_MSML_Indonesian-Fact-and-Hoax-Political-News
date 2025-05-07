@@ -16,3 +16,4 @@ dependencies:
       - nltk
       - tqdm
       - mlflow
+      - psutil
