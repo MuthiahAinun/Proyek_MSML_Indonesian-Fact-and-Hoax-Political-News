@@ -4,10 +4,8 @@ on:
   push:
     paths:
       - '.github/workflows/ci.yaml'
-      - 'Model/MLProject'
-      - 'Model/conda.yaml'
       - 'Model/train_and_log.py'
-      - 'Model/inference.py'
+      - 'Model/modelling.py'
       - 'requirements.txt'
   workflow_dispatch:
 
@@ -19,21 +17,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Miniconda
-        uses: conda-incubator/setup-miniconda@v2
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          auto-update-conda: true
-          environment-file: Model/conda.yaml
-          activate-environment: hoax-detection-env  # ini harus sama dengan 'name:' di conda.yaml
           python-version: 3.9
 
-      - name: Run MLflow Project
-        shell: bash # ini memastikan shell yang digunakan mendukung perintah 'conda activate'
-        run:  |
-          source /usr/share/miniconda/etc/profile.d/conda.sh
-          conda activate hoax-detection-env  # aktifkan environment Conda
-          mlflow run Model/ -e main --experiment-name hoax-detection -P epochs=3 -P batch_size=16
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install mlflow torch transformers scikit-learn pandas
 
+      - name: Run evaluation and log with MLflow
+        run: |
+          python Model/train_and_log.py
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
