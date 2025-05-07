@@ -12,6 +12,11 @@ from collections import Counter
 import random
 import re
 
+
+def load_and_augment_dataset(path):
+    df = pd.read_csv(path, compression='gzip')
+    return df
+
 # Easy Data Augmentation (EDA) functions
 def random_deletion(words, p=0.1):
     if len(words) == 1:
@@ -40,22 +45,21 @@ def eda(text, num_aug=4):
 
 # Load and augment data
 df = pd.read_csv("Experiment/preprocessing/dataset_cleaned.gz")
-df = df.dropna(subset=["clean_text", "hoax"])
-df['hoax'] = df['hoax'].astype(int)
+df['label'] = df['label'].astype(int)
 
 # Oversample minority class
-hoax_texts = df[df['hoax'] == 1]['clean_text'].tolist()
+hoax_texts = df[df['label'] == 1]['text'].tolist()
 augmented_texts = []
 for text in hoax_texts:
     augmented_texts.extend(eda(text, num_aug=2))
 
-temp_df = pd.DataFrame({'clean_text': augmented_texts, 'hoax': 1})
+temp_df = pd.DataFrame({'text': augmented_texts, 'label': 1})
 df = pd.concat([df, temp_df], ignore_index=True)
 
 # Tokenization
 tokenizer = AutoTokenizer.from_pretrained("cahya/distilbert-base-indonesian")
-encodings = tokenizer(df['clean_text'].tolist(), padding=True, truncation=True, max_length=512, return_tensors="pt")
-labels = df['hoax'].tolist()
+encodings = tokenizer(df['text'].tolist(), padding=True, truncation=True, max_length=512, return_tensors="pt")
+labels = df['label'].tolist()
 
 # Dataset class
 class IndoBertDataset(Dataset):
