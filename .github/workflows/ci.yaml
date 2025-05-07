@@ -31,7 +31,7 @@ jobs:
         shell: bash # ini memastikan shell yang digunakan mendukung perintah 'conda activate'
         run:  |
           source /usr/share/miniconda/etc/profile.d/conda.sh
-          conda activate hoax-detection  # aktifkan environment Conda
+          conda activate hoax-detection-env  # aktifkan environment Conda
           mlflow run . --experiment-name hoax-detection --epochs 3 --batch_size 16
 
 
