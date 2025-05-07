@@ -32,7 +32,7 @@ jobs:
         run:  |
           source /usr/share/miniconda/etc/profile.d/conda.sh
           conda activate hoax-detection-env  # aktifkan environment Conda
-          mlflow run . -e main --experiment-name hoax-detection -P epochs=3 -P batch_size=16
+          mlflow run Model/ -e main --experiment-name hoax-detection -P epochs=3 -P batch_size=16
 
 
       - name: Upload MLflow artifacts
