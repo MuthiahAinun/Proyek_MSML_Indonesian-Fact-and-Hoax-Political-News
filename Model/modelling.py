@@ -17,6 +17,8 @@ def random_deletion(words, p=0.1):
 
 def random_swap(words, n=1):
     new_words = words.copy()
+    if len(new_words) < 2:
+        return new_words  # skip if too short for swapping
     for _ in range(n):
         idx1, idx2 = random.sample(range(len(new_words)), 2)
         new_words[idx1], new_words[idx2] = new_words[idx2], new_words[idx1]
@@ -25,6 +27,8 @@ def random_swap(words, n=1):
 def eda(text, num_aug=4):
     text = re.sub(r'[^\w\s]', '', text)
     words = text.split()
+    if len(words) < 2:
+        return [text] * num_aug  # return original if too short
     augmented_sentences = []
     for _ in range(num_aug):
         aug_type = random.choice(['swap', 'delete'])
