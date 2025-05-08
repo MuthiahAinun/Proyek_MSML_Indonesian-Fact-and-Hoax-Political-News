@@ -1,17 +1,29 @@
-from augment import eda  # import dari augment.py
+import random
+import re
 
-def load_and_augment_dataset(path, do_augment=True):
-    df = pd.read_csv(path, compression='gzip')
-    df['label'] = df['label'].astype(int)
+def random_deletion(words, p=0.1):
+    if len(words) == 1:
+        return words
+    return [word for word in words if random.uniform(0, 1) > p]
 
-    if do_augment:
-        hoax_df = df[df['label'] == 1]
-        augmented_texts = []
-        for text in hoax_df['text']:
-            augmented_texts.extend(eda(text, num_aug=2))
+def random_swap(words, n=1):
+    new_words = words.copy()
+    for _ in range(n):
+        idx1, idx2 = random.sample(range(len(new_words)), 2)
+        new_words[idx1], new_words[idx2] = new_words[idx2], new_words[idx1]
+    return new_words
 
-        augmented_df = pd.DataFrame({'text': augmented_texts, 'label': 1})
-        df = pd.concat([df, augmented_df], ignore_index=True)
-        df = df.sample(frac=1).reset_index(drop=True)
+def eda(text, num_aug=4):
+    text = re.sub(r'[^\w\s]', '', text)  # remove punctuation
+    words = text.split()
+    augmented_sentences = []
 
-    return df
+    for _ in range(num_aug):
+        aug_type = random.choice(['swap', 'delete'])
+        if aug_type == 'swap':
+            new_words = random_swap(words, n=max(1, len(words) // 10))
+        else:
+            new_words = random_deletion(words, p=0.1)
+        augmented_sentences.append(' '.join(new_words))
+
+    return augmented_sentences
