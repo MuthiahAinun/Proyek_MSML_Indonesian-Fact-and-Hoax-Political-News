@@ -7,7 +7,6 @@ on:
       - 'Model/train_and_log.py'
       - 'Model/modelling.py'
       - 'requirements.txt'
-      - 'Monitoring/prometheus_exporter.py'
       - 'Dockerfile'
   workflow_dispatch:
 
