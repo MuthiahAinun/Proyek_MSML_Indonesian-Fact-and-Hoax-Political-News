@@ -82,7 +82,7 @@ The second step of this project involves running the **CI workflow file `ci.yaml
   🔗 [Docker Image - Hoax Exporter](https://hub.docker.com/r/muthiah192/hoax-exporter)
 
 📎 Artifact Example:  
-![Model Artifact](Experiment/preprocessing/Artifak-Model.png)
+![Model Artifact](Model/Artifak-Model.png)
 
 ---
 
