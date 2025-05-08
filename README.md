@@ -233,8 +233,8 @@ grafana:
     - GF_SMTP_ENABLED=true
     - GF_SMTP_HOST=smtp.gmail.com:587
     - GF_SMTP_USER=amirahannazihah@gmail.com
-    - GF_SMTP_PASSWORD=izrd bpyx ykif prum
-    - GF_SMTP_FROM_ADDRESS=APP_PASSWORD
+    - GF_SMTP_PASSWORD=APP_PASSWORD
+    - GF_SMTP_FROM_ADDRESS=amirahannazihah@gmail.com
     - GF_SMTP_SKIP_VERIFY=true
 ```
 **Grafana:** Visualizes data from Prometheus and sends alert notifications to email when thresholds are breached.
@@ -267,15 +267,15 @@ last_updated = Gauge('last_updated_timestamp', 'Timestamp of last metrics update
 Grafana dashboards are created using data sourced from Prometheus.
 
 **Sample dashboard:**
-🖼️ [Dashboard Screenshot](Model/Dashboard-Monitoring-Grafana-12-metrics.png)
+🖼️ ![Dashboard Screenshot](Model/Dashboard-Monitoring-Grafana-12-metrics.png)
 
 **Alerting Example:**
 
 An alert rule is triggered if accuracy drops below 90%, and Grafana sends a notification to the configured email.
 
-📸 [Alert Rule Example](Monitoring/Alerting Grafana/Rule_Accuracy.png)
+📸 ![Alert Rule Example](Monitoring/Alerting Grafana/Rule_Accuracy.png)
 
-📬 [Email Notification Example](Monitoring/Alerting Grafana/Notifikasi_Accuracy.png)
+📬 ![Email Notification Example](Monitoring/Alerting Grafana/Notifikasi_Accuracy.png)
 
 ---
 ## 🧪 Inference Testing
@@ -283,10 +283,10 @@ An alert rule is triggered if accuracy drops below 90%, and Grafana sends a noti
 You can perform inference directly from the running Docker container.
 
 Example hoax inference result:
-🖼️ [Hoax Result](inference_service/Hasil Inference-Hoax.png)
+🖼️ ![Hoax Result](inference_service/Hasil Inference-Hoax.png)
 
 Example non-hoax inference result:
-🖼️ [Non-hoax Result](inference_service/Hasil Inference-Non-hoax.png)
+🖼️ ![Non-hoax Result](inference_service/Hasil Inference-Non-hoax.png)
 
 ---
 ## 📁 Folder Structure for Monitoring and Inference
