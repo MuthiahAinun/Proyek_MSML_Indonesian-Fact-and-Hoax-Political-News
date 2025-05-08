@@ -6,6 +6,7 @@ on:
       - '.github/workflows/ci.yaml'
       - 'Model/train_and_log.py'
       - 'Model/modelling.py'
+      - 'Model/augment.py'  # augmentasi memicu CI
       - 'requirements.txt'
       - 'Dockerfile'
   workflow_dispatch:
@@ -61,4 +62,6 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: muthiah192/hoax-exporter:latest
+          tags: |
+            muthiah192/hoax-exporter:latest
+            muthiah192/hoax-exporter:${{ github.run_number }}
