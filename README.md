@@ -2,7 +2,7 @@
 
 ## 🗂️ Dataset Description: **Indonesian Fact and Hoax Political News**
 
-This dataset is a collection of Indonesian political news articles categorized into two main classes: Fact (valid) and Hoax (disinformation). It is sourced from both credible and non-credible platforms and is intended for training text classification models to detect fake news.
+This dataset is a collection of Indonesian political news articles categorized into two main classes: Non-Hoax/Fact (valid) and Hoax (disinformation). It is sourced from both credible and non-credible platforms and is intended for training text classification models to detect fake news.
 
 **📁 Dataset Files**
 
