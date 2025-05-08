@@ -273,9 +273,9 @@ Grafana dashboards are created using data sourced from Prometheus.
 
 An alert rule is triggered if accuracy drops below 90%, and Grafana sends a notification to the configured email.
 
-📸 ![Alert Rule Example](Monitoring/Alerting Grafana/Rule_Accuracy.png)
+📸 ![Alert Rule Example](Monitoring/Alerting%20Grafana/Rule_Accuracy.png)
 
-📬 ![Email Notification Example](Monitoring/Alerting Grafana/Notifikasi_Accuracy.png)
+📬 ![Email Notification Example](Monitoring/Alerting%20Grafana/Notifikasi_Accuracy.png)
 
 ---
 ## 🧪 Inference Testing
@@ -283,10 +283,12 @@ An alert rule is triggered if accuracy drops below 90%, and Grafana sends a noti
 You can perform inference directly from the running Docker container.
 
 Example hoax inference result:
-🖼️ ![Hoax Result](inference_service/Hasil Inference-Hoax.png)
+
+🖼️ ![Hoax Result](inference_service/Hasil%20Inference-Hoax.png)
 
 Example non-hoax inference result:
-🖼️ ![Non-hoax Result](inference_service/Hasil Inference-Non-hoax.png)
+
+🖼️ ![Non-hoax Result](inference_service/Hasil%20Inference-Non-hoax.png)
 
 ---
 ## 📁 Folder Structure for Monitoring and Inference
