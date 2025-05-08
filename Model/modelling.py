@@ -6,6 +6,7 @@ from torch.utils.data import Dataset
 from transformers import AutoTokenizer
 from sklearn.metrics import classification_report, accuracy_score
 from collections import Counter
+from augment import eda
 
 # Load & augment dataset
 def load_and_augment_dataset(path):
