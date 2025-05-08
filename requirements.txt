@@ -14,4 +14,7 @@ tqdm
 nltk
 mlflow
 flask
+fastapi
+uvicorn
+
 
