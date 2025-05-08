@@ -122,6 +122,7 @@ The second step of this project involves running the **CI workflow file `ci.yaml
 #### ✅ **Validation Set Results**
 - **Accuracy**: 0.9970
 
+```
           precision    recall  f1-score   support
 
 non-hoax       1.00      1.00      1.00      2090
@@ -134,11 +135,12 @@ weighted avg 1.00 1.00 1.00 2674
 
 Prediction distribution: Counter({0: 2086, 1: 584})
 Actual label distribution: Counter({0: 2090, 1: 584})
-
+```
 
 #### ✅ **Test Set Results**
 - **Accuracy**: 0.9966
 
+```
           precision    recall  f1-score   support
 
 non-hoax       1.00      1.00      1.00      2056
@@ -151,7 +153,7 @@ weighted avg 1.00 1.00 1.00 2674
 
 Prediction distribution: Counter({0: 2051, 1: 623})
 Actual label distribution: Counter({0: 2056, 1: 618})
-
+```
 
 ---
 
