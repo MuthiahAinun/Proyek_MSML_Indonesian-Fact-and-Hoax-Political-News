@@ -1,0 +1,9 @@
+name: hoax-detection
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters: {}
+    command: >
+      python train_and_log.py

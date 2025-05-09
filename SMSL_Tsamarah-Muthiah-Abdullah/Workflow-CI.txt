@@ -1,0 +1,12 @@
+This project involves running the CI workflow file ci.yaml, which automates the training and evaluation process. This workflow will trigger the execution of train_and_log.py and modelling.py. The key processes in this step include:
+
+1. Performing oversampling using Easy Data Augmentation (EDA) to address class imbalance (minority class: hoax == 1)
+2. Tokenizing the text data
+3. Setting up PyTorch DataLoaders
+4. Splitting the dataset into 80% training and 20% validation
+5. Loading a pre-trained model from Hugging Face:
+🔗 Hugging Face Model - distilbert-hoax-classifier : https://huggingface.co/Muthiah192/distilbert-hoax-classifier/tree/main
+6. Evaluating the model on the dataset
+7. Uploading MLflow artifacts
+8. Building and pushing a Docker image to Docker Hub:
+🔗 Docker Image - Hoax Exporter : https://hub.docker.com/r/muthiah192/hoax-exporter

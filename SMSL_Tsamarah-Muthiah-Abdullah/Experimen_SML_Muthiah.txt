@@ -1,0 +1,27 @@
+Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News
+
+🗂️ Dataset Description: Indonesian Fact and Hoax Political News
+This dataset is a collection of Indonesian political news articles categorized into two main classes: Non-Hoax/Fact (valid) and Hoax (disinformation). It is sourced from both credible and non-credible platforms and is intended for training text classification models to detect fake news.
+
+📁 Dataset Files
+
+The dataset consists of the following files and their respective sources:
+
+dataset_tempo_6k_cleaned.xlsx – Valid political news from Tempo (~6,000 entries)
+
+dataset_kompas_4k_cleaned.xlsx – Valid political news from Kompas (~4,000 entries)
+
+dataset_cnn_10k_cleaned.xlsx – Valid political news from CNN Indonesia (~10,000 entries)
+
+dataset_turnbackhoax_10_cleaned.xlsx – Hoax news from Turnbackhoax.id (~10,000 entries)
+
+✅ Truth Labels
+
+Valid / Factual: Collected from mainstream and trusted news portals: CNN Indonesia, Tempo, and Kompas.
+
+Hoax / Disinformation: Collected from Turnbackhoax.id, a site that aggregates and verifies false or misleading claims.
+
+🔍 Dataset Source
+
+This dataset was downloaded from Kaggle:
+https://www.kaggle.com/datasets/linkgish/indonesian-fact-and-hoax-political-news?resource=download

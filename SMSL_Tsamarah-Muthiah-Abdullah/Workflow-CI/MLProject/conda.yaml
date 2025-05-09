@@ -1,0 +1,19 @@
+name: hoax-detection-env
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.9  # atau ganti dengan 3.11 jika perlu
+  - pip
+  - pip:
+      - torch
+      - transformers
+      - scikit-learn
+      - pandas
+      - matplotlib
+      - seaborn
+      - wordcloud
+      - nltk
+      - tqdm
+      - mlflow
+      - psutil

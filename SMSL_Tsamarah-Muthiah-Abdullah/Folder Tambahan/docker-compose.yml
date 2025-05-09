@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  exporter:
+    image: muthiah192/hoax-exporter:latest
+    ports:
+      - "8000:8000"
+    restart: always
+
+  inference:
+    build:
+      context: "C:/Users/ACER NITRO V15/inference_service"
+    ports:
+      - "8001:8001"  # Ubah sesuai kebutuhan
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - "/c/Users/ACER NITRO V15/Monitoring/prometheus.yml:/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    restart: always
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # ganti jika perlu
+      - GF_SMTP_ENABLED=true
+      - GF_SMTP_HOST=smtp.gmail.com:587
+      - GF_SMTP_USER=amirahannazihah@gmail.com
+      - GF_SMTP_PASSWORD=APP_PASSWORD
+      - GF_SMTP_FROM_ADDRESS=amirahannazihah@gmail.com
+      - GF_SMTP_SKIP_VERIFY=true
+
+volumes:
+  grafana-storage:
