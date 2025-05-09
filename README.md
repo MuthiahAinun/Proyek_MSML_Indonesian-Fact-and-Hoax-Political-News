@@ -49,15 +49,15 @@ Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News
 │ └── preprocess.yml # Workflow file for dataset preprocessing
 ├── Experiment
 │ ├── dataset_raw # Folder containing original raw datasets
-│ │ ├── dataset_cnn_10k_cleaned.xlsx
-│ │ ├── dataset_kompas_4k_cleaned.xlsx
-│ │ ├── dataset_tempo_6k_cleaned.xlsx
+│ │ └── dataset_cnn_10k_cleaned.xlsx
+│ │ └── dataset_kompas_4k_cleaned.xlsx
+│ │ └── dataset_tempo_6k_cleaned.xlsx
 │ │ └── dataset_turnbackhoax_10k_cleaned.xlsx
 │ ├── preprocessing # Folder for all preprocessing outputs
-│ │ ├── Artifak-Preprocessing.png # Image preview of preprocessing artifact
-│ │ ├── Eksperimen_MSML_Tsamarah_Muthiah_Abdullah.ipynb # Full notebook for preprocessing, training, and inference (Colab-based)
-│ │ ├── automate_Tsamarah-Muthiah-Abdullah.py # Python script to automate preprocessing (used in preprocess.yml)
-│ │ ├── dataset-cleaned.gz # Cleaned dataset exported from Colab
+│ │ └── Artifak-Preprocessing.png # Image preview of preprocessing artifact
+│ │ └── Eksperimen_MSML_Tsamarah_Muthiah_Abdullah.ipynb # Full notebook for preprocessing, training, and inference (Colab-based)
+│ │ └── automate_Tsamarah-Muthiah-Abdullah.py # Python script to automate preprocessing (used in preprocess.yml)
+│ │ └── dataset-cleaned.gz # Cleaned dataset exported from Colab
 │ │ └── dataset_cleaned.gz # Cleaned dataset generated automatically from GitHub workflow artifact
 ```
 
@@ -88,17 +88,18 @@ The second step of this project involves running the **CI workflow file `ci.yaml
 
 ### 📁 Folder Structure for Step 2
 ```
-├── .github/workflows
+├── .github/workflows Artifak-MLFlow-Dagshub.png
 │ └── ci.yaml # CI workflow file for model training and Docker image build
 ├── Model
-│ ├── Artifak-Model.png # Visual artifact from CI workflow run
-│ ├── Dashboard-Monitoring-Grafana-12-metrics.png # Grafana monitoring dashboard preview
-│ ├── MLProject # MLflow project file to enable automated retraining
-│ ├── URL_Docker_Image # File containing link to the generated Docker image
-│ ├── URL_Model_Saved # File containing link to the saved Hugging Face model
-│ ├── augment.py # Script to perform text augmentation (EDA)
-│ ├── conda.yaml # MLflow environment specification file (see below for description)
-│ ├── modelling.py # Contains model architecture, dataset splitting, and tokenization logic
+│ └── Artifak-MLFlow-Dagshub.png # Visual artifact Dagshub
+│ └── Artifak-Model.png # Visual artifact from CI workflow run
+│ └── Dashboard-Monitoring-Grafana-12-metrics.png # Grafana monitoring dashboard preview
+│ └── MLProject # MLflow project file to enable automated retraining
+│ └── URL_Docker_Image # File containing link to the generated Docker image
+│ └── URL_Model_Saved # File containing link to the saved Hugging Face model
+│ └── augment.py # Script to perform text augmentation (EDA)
+│ └── conda.yaml # MLflow environment specification file (see below for description)
+│ └── modelling.py # Contains model architecture, dataset splitting, and tokenization logic
 │ └── train_and_log.py # Script to train the model, evaluate it, and log metrics to MLflow
 ├── Dockerfile # Dockerfile to build the inference/exporter image
 ```
@@ -156,7 +157,23 @@ Actual label distribution: Counter({0: 2056, 1: 618})
 ```
 
 ---
+## 🎗️ MLflow Artifacts - DistilBERT Hoax Detection on DagsHub:
 
+The **MLflow tracking artifacts** for this project have been successfully uploaded and integrated with **DagsHub**, and can be accessed at the following link:
+
+🔗 [View MLflow Experiments on DagsHub](https://dagshub.com/MuthiahAinun/distilbert-hoax-detection/experiments)
+
+### Logged Artifacts Include:
+
+- **`source`**: Indicates the origin of the model or inference process (e.g., from Hugging Face).
+- **`test_accuracy`**: Accuracy of the model on the test dataset.
+- **`val_accuracy`**: Accuracy of the model on the validation dataset.
+
+> ⚠️ Note: Some experiment entries were created during test uploads to verify successful data migration. Only entries with proper `source`, `test_accuracy`, and `val_accuracy` represent valid model training results.
+
+![Dagshub Image - Hoax Detection](Model/Artifak-MLFlow-Dagshub.png)
+  
+---
 > This step is critical for ensuring model performance and deploying the result into a containerized environment for inference or monitoring purposes.
 ---
 
@@ -267,15 +284,15 @@ last_updated = Gauge('last_updated_timestamp', 'Timestamp of last metrics update
 Grafana dashboards are created using data sourced from Prometheus.
 
 **Sample dashboard:**
-🖼️ ![Dashboard Screenshot](Model/Dashboard-Monitoring-Grafana-12-metrics.png)
+![Dashboard Screenshot](Model/Dashboard-Monitoring-Grafana-12-metrics.png)
 
 **Alerting Example:**
 
 An alert rule is triggered if accuracy drops below 90%, and Grafana sends a notification to the configured email.
 
-📸 ![Alert Rule Example](Monitoring/Alerting%20Grafana/Rule_Accuracy.png)
+![Alert Rule Example](Monitoring/Alerting%20Grafana/Rule_Accuracy.png)
 
-📬 ![Email Notification Example](Monitoring/Alerting%20Grafana/Notifikasi_Accuracy.png)
+![Email Notification Example](Monitoring/Alerting%20Grafana/Notifikasi_Accuracy.png)
 
 ---
 ## 🧪 Inference Testing
@@ -284,24 +301,24 @@ You can perform inference directly from the running Docker container.
 
 Example hoax inference result:
 
-🖼️ ![Hoax Result](inference_service/Hasil%20Inference-Hoax.png)
+![Hoax Result](inference_service/Hasil%20Inference-Hoax.png)
 
 Example non-hoax inference result:
 
-🖼️ ![Non-hoax Result](inference_service/Hasil%20Inference-Non-hoax.png)
+![Non-hoax Result](inference_service/Hasil%20Inference-Non-hoax.png)
 
 ---
 ## 📁 Folder Structure for Monitoring and Inference
 ```
 ├── docker-compose.yml          # Used to launch exporter, inference, prometheus, and grafana
 ├── Monitoring
-│   ├── Alerting Grafana        # Screenshots of alert rules and notifications
-│   ├── Monitoring Grafana      # Grafana metrics dashboard screenshots
-│   ├── Monitoring Prometheus   # Prometheus metrics dashboard screenshots
-│   ├── prometheus.yml          # Prometheus configuration file (see below)
+│   └── Alerting Grafana        # Screenshots of alert rules and notifications
+│   └── Monitoring Grafana      # Grafana metrics dashboard screenshots
+│   └── Monitoring Prometheus   # Prometheus metrics dashboard screenshots
+│   └── prometheus.yml          # Prometheus configuration file (see below)
 │   └── prometheus_exporter.py  # Script exposing model metrics for Prometheus (see below)
 ├── Inference_serving
-│   ├── Dockerfile              # Dockerfile to serve inference API (see below)
+│   └── Dockerfile              # Dockerfile to serve inference API (see below)
 │   └── inference.py            # FastAPI app to handle /predict and /metrics (see below)
 ```
 ### 📄 File Descriptions
