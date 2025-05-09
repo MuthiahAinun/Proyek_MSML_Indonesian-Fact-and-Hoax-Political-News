@@ -168,7 +168,7 @@ The **MLflow tracking artifacts** for this project have been successfully upload
 - **`source`**: Indicates the origin of the model or inference process (from Hugging Face Muthiah192/distilbert-hoax-classifier).
 - **`test_accuracy`**: Accuracy of the model on the test dataset.
 - **`val_accuracy`**: Accuracy of the model on the validation dataset.
-- **Log HF model as artifact**:The DagsHub experiment 'Log HF Model as Artifact' is designed to store the model artifact from Hugging Face, specifically the Muthiah192/distilbert-hoax-classifier.
+- **`Log HF model as artifact`**:The DagsHub experiment `Log HF Model as Artifact` is designed to store the model artifact from Hugging Face, specifically the Muthiah192/distilbert-hoax-classifier.
 
 ![Dagshub Image - Hoax Detection](Model/MLFlow-Artifact-Dagshub.png)
   
