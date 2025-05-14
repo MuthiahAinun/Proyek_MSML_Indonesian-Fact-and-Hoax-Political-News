@@ -36,11 +36,6 @@ jobs:
           source "${CONDA}/etc/profile.d/conda.sh"
           conda info --envs
 
-      - name: Download dataset
-        run: |
-          mkdir -p Model/Experiment/preprocessing
-          wget https://raw.githubusercontent.com/MuthiahAinun/Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News/main/Experiment/preprocessing/dataset_cleaned_prepo.gz -O Experiment/preprocessing/dataset_cleaned_prepo.gz
-
       - name: Run MLflow project using existing conda env
         shell: bash
         working-directory: Model
