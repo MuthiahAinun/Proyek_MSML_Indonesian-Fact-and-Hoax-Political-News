@@ -33,11 +33,16 @@ jobs:
           conda info --envs
 
       - name: Run MLflow project using existing conda env
+        shell: bash
         run: |
+          source $CONDA/etc/profile.d/conda.sh
+          conda activate hoax-env
           cd Model
+          which mlflow  # memastikan mlflow dikenali
           mlflow run . --env-manager=local --no-conda --experiment-name hoax-detection -P epochs=3 -P batch_size=16
           RUN_ID=$(ls -td mlruns/0/* | head -1 | xargs -n 1 basename)
           echo "$RUN_ID" > last_run_id.txt
+
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
