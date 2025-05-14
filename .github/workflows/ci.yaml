@@ -21,21 +21,23 @@ jobs:
         with:
           environment-file: Model/conda.yaml
           environment-name: hoax-env
+          activate-environment: hoax-env
           python-version: 3.9
           use-mamba: true
           auto-update-conda: true
           auto-activate-base: false
 
-      - name: Run MLflow project using existing conda env
-        shell: bash
+      - name: Debug - List Conda Environments
         run: |
-          source "${CONDA}/etc/profile.d/conda.sh"  # Aktivasi conda
-          conda activate hoax-env                    # Pastikan environment aktif
-          cd Model                                    # Masuk ke direktori yang benar
-          mlflow run . --env-manager=local --no-conda --experiment-name hoax-detection --epochs 3 --batch_size 16
-          # Dapatkan RUN_ID dari mlruns
+          source "${CONDA}/etc/profile.d/conda.sh"
+          conda info --envs
+
+      - name: Run MLflow project using existing conda env
+        run: |
+          cd Model
+          mlflow run . --env-manager=local --no-conda --experiment-name hoax-detection -P epochs=3 -P batch_size=16
           RUN_ID=$(ls -td mlruns/0/* | head -1 | xargs -n 1 basename)
-          echo "$RUN_ID" > Model/last_run_id.txt
+          echo "$RUN_ID" > last_run_id.txt
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
