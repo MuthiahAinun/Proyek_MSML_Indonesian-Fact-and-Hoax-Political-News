@@ -11,7 +11,7 @@ import pandas as pd
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Load dataset
-df = load_and_augment_dataset("Experiment/preprocessing/dataset_cleaned.gz")
+df = load_and_augment_dataset("Experiment/preprocessing/dataset_cleaned_prepo.gz")
 encodings, labels = tokenize_data(df)
 dataset = IndoBertDataset(encodings, labels)
 
