@@ -35,7 +35,7 @@ This project is designed to be built and executed using **GitHub Actions workflo
 ### Step 1️⃣ : Running the Preprocessing Pipeline Workflow (`preprocess.yml`)
 The first step in the process is **preprocessing the four datasets**. Simply trigger the workflow defined in the `preprocess.yml` file located in `.github/workflows/`.
 
-Once the workflow runs successfully, the **preprocessed dataset will be saved as an artifact**, which can be downloaded directly from the GitHub Actions interface.  
+Once the workflow runs successfully, the **preprocessed dataset will be saved as an artifact**, which can be downloaded directly from the [GitHub Actions interface](https://github.com/MuthiahAinun/Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News/actions/runs/15024307645).  
 📎 Artifact Example:  
 ![Preprocessing Artifact](Experiment/preprocessing/Artifak-Preprocessing.png)
 
