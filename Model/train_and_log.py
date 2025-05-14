@@ -10,8 +10,17 @@ import pandas as pd
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--epochs', type=int, default=3)
+parser.add_argument('--batch_size', type=int, default=16)
+parser.add_argument('--data-path', type=str, default='../Experiment/preprocessing/dataset_cleaned_prepo.gz')
+args = parser.parse_args()
+
+
 # Load dataset
-df = load_and_augment_dataset("Experiment/preprocessing/dataset_cleaned_prepo.gz")
+df = load_and_augment_dataset(args.data_path)
 encodings, labels = tokenize_data(df)
 dataset = IndoBertDataset(encodings, labels)
 
