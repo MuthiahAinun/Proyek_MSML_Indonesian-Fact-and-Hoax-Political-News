@@ -16,6 +16,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Clean conda cache
+        run: conda clean -afy
+
       - name: Set up Conda with Mambaforge and Create Environment
         uses: conda-incubator/setup-miniconda@v2
         with:
@@ -26,23 +29,28 @@ jobs:
           use-mamba: true
           auto-update-conda: true
           auto-activate-base: false
+          
 
       - name: Debug - List Conda Environments
         run: |
           source "${CONDA}/etc/profile.d/conda.sh"
           conda info --envs
 
+      - name: Download dataset
+        run: |
+          mkdir -p Experiment/preprocessing
+          wget https://raw.githubusercontent.com/MuthiahAinun/Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News/main/Experiment/preprocessing/dataset_cleaned_prepo.gz -O Experiment/preprocessing/dataset_cleaned_prepo.gz
+
       - name: Run MLflow project using existing conda env
         shell: bash
+        working-directory: Model
         run: |
           source $CONDA/etc/profile.d/conda.sh
           conda activate hoax-env
-          cd Model
-          which mlflow  # memastikan mlflow dikenali
+          which mlflow
           mlflow run . --env-manager=local --experiment-name hoax-detection -P epochs=3 -P batch_size=16
           RUN_ID=$(ls -td mlruns/0/* | head -1 | xargs -n 1 basename)
           echo "$RUN_ID" > last_run_id.txt
-
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
