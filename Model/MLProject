@@ -2,7 +2,7 @@ name: hoax-detection
 
 artifacts:
   dataset:
-    path: ../Experiment/preprocessing/dataset_cleaned_prepo.gz
+    path: ./Experiment/preprocessing/dataset_cleaned_prepo.gz
 
 entry_points:
   main:
