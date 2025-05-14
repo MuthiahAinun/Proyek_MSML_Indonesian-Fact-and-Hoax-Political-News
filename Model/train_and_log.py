@@ -15,7 +15,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--epochs', type=int, default=3)
 parser.add_argument('--batch_size', type=int, default=16)
-parser.add_argument('--data-path', type=str, default='./Experiment/preprocessing/dataset_cleaned_prepo.gz')
+parser.add_argument('--data-path', type=str, default='dataset_cleaned_prepo.gz')
 args = parser.parse_args()
 
 
@@ -39,31 +39,34 @@ model = AutoModelForSequenceClassification.from_pretrained(model_name)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model.to(device)
 
-# MLflow Logging
+# MLFlow Logging
 mlflow.set_experiment("HoaxDetection")
 
-with mlflow.start_run() as run:
-    mlflow.log_param("source", "huggingface_pretrained")
-    run_id = run.info.run_id
+run = mlflow.active_run()
+if run is None:
+    run = mlflow.start_run()
 
-    # Simpan run_id ke file
-    with open("last_run_id.txt", "w") as f:
-        f.write(run_id)
+mlflow.log_param("source", "huggingface_pretrained")
+run_id = run.info.run_id
 
-    # Evaluasi dan log metric
-    val_acc = evaluate_all(model, val_loader, name="Validation")
-    test_acc = evaluate_all(model, test_loader, name="Test")
-    mlflow.log_metric("val_accuracy", val_acc)
-    mlflow.log_metric("test_accuracy", test_acc)
+# Simpan run_id ke file
+with open("last_run_id.txt", "w") as f:
+    f.write(run_id)
 
-    # Siapkan input_example (harus cocok dengan format serving)
-    input_example = pd.DataFrame([{"text": "Berita ini mengandung unsur penipuan dan hoaks."}])
+# Evaluasi dan log metric
+val_acc = evaluate_all(model, val_loader, name="Validation")
+test_acc = evaluate_all(model, test_loader, name="Test")
+mlflow.log_metric("val_accuracy", val_acc)
+mlflow.log_metric("test_accuracy", test_acc)
 
-    # Log model ke MLflow
-    mlflow.transformers.log_model(
-        transformers_model={"model": model, "tokenizer": tokenizer},
-        artifact_path="model",
-        input_example=input_example
-    )
+# Siapkan input_example (harus cocok dengan format serving)
+input_example = pd.DataFrame([{"text": "Berita ini mengandung unsur penipuan dan hoaks."}])
 
-    print("Model dan metrik berhasil dilog ke MLflow.")
+# Log model ke MLflow
+mlflow.transformers.log_model(
+    transformers_model={"model": model, "tokenizer": tokenizer},
+    artifact_path="model",
+    input_example=input_example
+)
+
+print("Model dan metrik berhasil dilog ke MLflow.")
