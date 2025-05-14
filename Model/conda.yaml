@@ -3,17 +3,19 @@ channels:
   - defaults
   - conda-forge
 dependencies:
-  - python=3.9  # atau ganti dengan 3.11 jika perlu
+  - python=3.10
   - pip
   - pip:
       - torch
+      - torchvision
       - transformers
       - scikit-learn
       - pandas
       - matplotlib
       - seaborn
       - wordcloud
-      - nltk
       - tqdm
       - mlflow
-      - psutil
+      - datasets
+      - nltk
+      - protobuf<4.0.0
