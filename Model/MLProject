@@ -10,4 +10,4 @@ entry_points:
       epochs: {type: int, default: 3}
       batch_size: {type: int, default: 16}
     command: >
-      python train_and_log.py --epochs {epochs} --batch_size {batch_size} --data-path dataset/dataset_cleaned_prepo.gz
+      python train_and_log.py --epochs {epochs} --batch_size {batch_size} --data-path {data_path}
