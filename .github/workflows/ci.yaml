@@ -38,7 +38,7 @@ jobs:
 
       - name: Download dataset
         run: |
-          mkdir -p Experiment/preprocessing
+          mkdir -p Model/Experiment/preprocessing
           wget https://raw.githubusercontent.com/MuthiahAinun/Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News/main/Experiment/preprocessing/dataset_cleaned_prepo.gz -O Experiment/preprocessing/dataset_cleaned_prepo.gz
 
       - name: Run MLflow project using existing conda env
