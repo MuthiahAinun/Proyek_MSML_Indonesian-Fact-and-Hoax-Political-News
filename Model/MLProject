@@ -2,13 +2,13 @@ name: hoax-detection
 
 artifacts:
   dataset:
-    path: ./Experiment/preprocessing/dataset_cleaned_prepo.gz
+    path: ./Model/dataset_cleaned_prepo.gz
 
 entry_points:
   main:
     parameters:
       epochs: {type: int, default: 3}
       batch_size: {type: int, default: 16}
-      data_path: {type: str, default: dataset_cleaned_prepo.gz}
+      data_path: {type: str, default: "dataset_cleaned_prepo.gz"}
     command: >
       python train_and_log.py --epochs {epochs} --batch_size {batch_size} --data-path {data_path}
