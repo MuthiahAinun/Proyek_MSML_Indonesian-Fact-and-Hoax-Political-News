@@ -4,6 +4,7 @@ conda_env: conda.yaml
 
 entry_points:
   main:
-    parameters: {}
+    parameters:
+      source: {type: str, default: manual}
     command: >
       python train_and_log.py
