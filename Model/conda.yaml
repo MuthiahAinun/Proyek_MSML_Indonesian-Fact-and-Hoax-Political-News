@@ -1,21 +1,13 @@
-name: hoax-detection-env
+name: hoax-env
 channels:
   - defaults
   - conda-forge
 dependencies:
-  - python=3.10
+  - python=3.9
   - pip
   - pip:
       - torch
-      - torchvision
       - transformers
-      - scikit-learn
       - pandas
-      - matplotlib
-      - seaborn
-      - wordcloud
-      - tqdm
+      - scikit-learn
       - mlflow
-      - datasets
-      - nltk
-      - protobuf<4.0.0
