@@ -15,7 +15,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--epochs', type=int, default=3)
 parser.add_argument('--batch_size', type=int, default=16)
-parser.add_argument('--data-path', type=str, default='dataset/dataset_cleaned_prepo.gz')
+parser.add_argument('--data-path', type=str, default='./Experiment/preprocessing/dataset_cleaned_prepo.gz')
 args = parser.parse_args()
 
 
