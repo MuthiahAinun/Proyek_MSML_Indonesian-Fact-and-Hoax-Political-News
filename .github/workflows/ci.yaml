@@ -39,7 +39,7 @@ jobs:
           conda activate hoax-env
           cd Model
           which mlflow  # memastikan mlflow dikenali
-          mlflow run . --env-manager=local --no-conda --experiment-name hoax-detection -P epochs=3 -P batch_size=16
+          mlflow run . --env-manager=local --experiment-name hoax-detection -P epochs=3 -P batch_size=16
           RUN_ID=$(ls -td mlruns/0/* | head -1 | xargs -n 1 basename)
           echo "$RUN_ID" > last_run_id.txt
 
