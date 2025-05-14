@@ -24,27 +24,27 @@ jobs:
           use-mamba: true
 
       - name: Install MLflow (global)
-        shell: bash -l {0}
+        shell: bash
         run: |
           pip install mlflow
 
       - name: Run MLflow Project with conda
-        shell: bash -l {0}
+        shell: bash
         run: |
-          cd Model
-          mlflow run . --env-manager=conda
+          cd Model  # Pastikan berada di dalam folder Model/
+          mlflow run . --env-manager=conda  # Menjalankan project MLflow dari folder Model/
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
         with:
           name: mlflow-artifacts
-          path: mlruns
+          path: Model/mlruns  # Pastikan path mlruns ada di dalam folder Model/
 
       - name: Upload last run ID
         uses: actions/upload-artifact@v4
         with:
           name: run-id
-          path: Model/last_run_id.txt
+          path: Model/last_run_id.txt  # Path untuk menyimpan run-id
 
   build-and-push-docker:
     runs-on: ubuntu-latest
@@ -66,22 +66,22 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: mlflow-artifacts
-          path: mlruns
+          path: Model/mlruns  # Pastikan mengunduh artefak dari folder Model/
 
       - name: Download run ID file
         uses: actions/download-artifact@v4
         with:
           name: run-id
-          path: run_id_info
+          path: Model/run_id_info  # Menyimpan run-id untuk digunakan pada langkah berikutnya
 
       - name: Read run ID
         id: read_run
         run: |
-          echo "RUN_ID=$(cat run_id_info/last_run_id.txt)" >> $GITHUB_ENV
+          echo "RUN_ID=$(cat Model/run_id_info/last_run_id.txt)" >> $GITHUB_ENV  # Membaca run-id dan menyimpannya ke environment variable
 
       - name: Build Docker image from MLflow model
         run: |
-          mlflow models build-docker -m mlruns/0/${{ env.RUN_ID }}/artifacts/model -n muthiah192/hoax-detector:latest
+          mlflow models build-docker -m Model/mlruns/0/${{ env.RUN_ID }}/artifacts/model -n muthiah192/hoax-detector:latest  # Membuat Docker image dari model
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
