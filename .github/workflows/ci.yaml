@@ -29,7 +29,7 @@ jobs:
       - name: Run MLflow project using existing conda env
         shell: bash
         run: |
-          source ~/miniconda/etc/profile.d/conda.sh
+          source "${CONDA}/etc/profile.d/conda.sh"
           conda activate hoax-env
           cd Model
           mlflow run . --env-manager=local --no-conda
