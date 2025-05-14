@@ -16,36 +16,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Mambaforge
+      - name: Set up Conda with Mambaforge and Create Environment
         uses: conda-incubator/setup-miniconda@v2
         with:
+          environment-file: Model/conda.yaml
+          environment-name: hoax-env
           python-version: 3.9
           use-mamba: true
           auto-update-conda: true
           auto-activate-base: false
 
-      - name: Install MLflow (global)
+      - name: Run MLflow project using existing conda env
         shell: bash
         run: |
-          pip install mlflow
-
-      - name: Run MLflow Project with conda
-        shell: bash
-        run: |
-          cd Model  # Pastikan berada di dalam folder Model/
-          mlflow run . --env-manager=conda  # Menjalankan project MLflow dari folder Model/
+          source ~/miniconda/etc/profile.d/conda.sh
+          conda activate hoax-env
+          cd Model
+          mlflow run . --env-manager=local --no-conda
+          RUN_ID=$(ls -td mlruns/0/* | head -1 | xargs -n 1 basename)
+          echo "$RUN_ID" > last_run_id.txt
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
         with:
           name: mlflow-artifacts
-          path: Model/mlruns  # Pastikan path mlruns ada di dalam folder Model/
+          path: Model/mlruns
 
       - name: Upload last run ID
         uses: actions/upload-artifact@v4
         with:
           name: run-id
-          path: Model/last_run_id.txt  # Path untuk menyimpan run-id
+          path: Model/last_run_id.txt
 
   build-and-push-docker:
     runs-on: ubuntu-latest
@@ -67,22 +68,21 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: mlflow-artifacts
-          path: Model/mlruns  # Pastikan mengunduh artefak dari folder Model/
+          path: Model/mlruns
 
       - name: Download run ID file
         uses: actions/download-artifact@v4
         with:
           name: run-id
-          path: Model/run_id_info  # Menyimpan run-id untuk digunakan pada langkah berikutnya
+          path: Model/run_id_info
 
       - name: Read run ID
         id: read_run
-        run: |
-          echo "RUN_ID=$(cat Model/run_id_info/last_run_id.txt)" >> $GITHUB_ENV  # Membaca run-id dan menyimpannya ke environment variable
+        run: echo "RUN_ID=$(cat Model/run_id_info/last_run_id.txt)" >> $GITHUB_ENV
 
       - name: Build Docker image from MLflow model
         run: |
-          mlflow models build-docker -m Model/mlruns/0/${{ env.RUN_ID }}/artifacts/model -n muthiah192/hoax-detector:latest  # Membuat Docker image dari model
+          mlflow models build-docker -m Model/mlruns/0/${{ env.RUN_ID }}/artifacts/model -n muthiah192/hoax-detector:latest
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
