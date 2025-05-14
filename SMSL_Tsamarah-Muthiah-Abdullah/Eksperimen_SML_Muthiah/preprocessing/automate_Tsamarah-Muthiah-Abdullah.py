@@ -1,5 +1,6 @@
 import pandas as pd
 import re
+import string
 
 # 1. Load raw datasets
 paths = [
@@ -14,29 +15,35 @@ dfs = [pd.read_excel(p) for p in paths]
 for df in dfs:
     if "text_new" in df.columns:
         df.rename(columns={"text_new": "text"}, inplace=True)
-    else:
+    elif "Clean Narasi" in df.columns:
         df.rename(columns={"Clean Narasi": "text"}, inplace=True)
 
-# 3. Concat & cleanup
+# 3. Combine all datasets
 combined = pd.concat(dfs, ignore_index=True)
+
+# 4. Drop missing and duplicate values
 combined.dropna(subset=["text"], inplace=True)
 combined.drop_duplicates(subset=["text", "hoax"], inplace=True)
 
-# 4. Basic cleaning
-def clean_text(t):
-    t = re.sub(r"http\S+", "", str(t))
-    t = re.sub(r"\s+", " ", t).strip()
-    return t
+# 5. Clean text
+def clean_text(text):
+    text = str(text).lower()                                      # lowercase
+    text = re.sub(r"http[s]?://\S+", "", text)                    # remove URLs
+    text = re.sub(r"\d+", "", text)                               # remove numbers
+    text = text.translate(str.maketrans('', '', string.punctuation))  # remove punctuation
+    text = re.sub(r"[^a-zA-Z\s]", "", text)                       # remove non-alphabetic chars
+    text = re.sub(r"\s+", " ", text).strip()                      # normalize whitespace
+    return text
 
 combined["clean_text"] = combined["text"].apply(clean_text)
 
-# 5. Filter length
+# 6. Word count filtering
 combined["word_count"] = combined["clean_text"].apply(lambda x: len(x.split()))
-combined = combined[(combined["word_count"] > 10) & (combined["word_count"] < 10000)]
+filtered = combined[(combined["word_count"] >= 10) & (combined["word_count"] <= 1000)]
 
-# 6. Keep only needed cols
-final = combined[["clean_text", "hoax"]].rename(columns={"clean_text":"text", "hoax":"label"})
+# 7. Select final columns
+final = filtered[["clean_text", "hoax"]].rename(columns={"clean_text": "text", "hoax": "label"})
 
-# 7. Save processed dataset
+# 8. Save result
 final.to_csv("Experiment/preprocessing/dataset_cleaned.csv", index=False)
-print(f"Processed {len(final)} rows.")
+print(f"✅ Dataset cleaned & saved: {len(final)} rows.")
