@@ -1,9 +1,10 @@
 name: hoax-detection
 
-conda_env: conda.yaml
-
 entry_points:
   main:
     parameters:
-      stages: {type: str, default: train}
-    command: "python train_and_log.py"
+      epochs: {type: int, default: 3}
+      batch_size: {type: int, default: 16}
+      data_path: {type: str, default: "../Experiment/preprocessing/dataset_cleaned_prepo.gz"}
+    command: >
+      python train_and_log.py --epochs {epochs} --batch_size {batch_size} --data-path {data_path}
