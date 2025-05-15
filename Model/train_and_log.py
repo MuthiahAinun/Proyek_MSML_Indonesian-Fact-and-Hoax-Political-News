@@ -39,9 +39,17 @@ model.to(device)
 # Set experiment
 mlflow.set_experiment("HoaxDetection")
 
+# Log current active run
+active_run = mlflow.active_run()
+if active_run:
+    print(f"Active run ID: {active_run.info.run_id}")
+else:
+    print("No active run.")
+
 # Mulai run baru
 with mlflow.start_run() as run:
     run_id = run.info.run_id
+    print(f"Starting new run with ID: {run_id}")
     mlflow.log_param("source", "huggingface_pretrained")
     val_acc = evaluate_all(model, val_loader, name="Validation")
     test_acc = evaluate_all(model, test_loader, name="Test")
