@@ -40,34 +40,29 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 model.to(device)
 
 # MLFlow Logging
-# Set eksperimen (akan dibuat jika belum ada)
+import mlflow
+import pandas as pd
+
+# Mulai run manual karena pakai --env-manager=local
 mlflow.set_experiment("HoaxDetection")
 
-# Ambil run yang sudah aktif (karena pakai `mlflow run .`)
-active_run = mlflow.active_run()
-assert active_run is not None, "Tidak ada MLflow run aktif. Pastikan dijalankan dengan 'mlflow run .'"
+with mlflow.start_run() as run:
+    run_id = run.info.run_id
+    mlflow.log_param("source", "huggingface_pretrained")
 
-run_id = active_run.info.run_id
+    val_acc = evaluate_all(model, val_loader, name="Validation")
+    test_acc = evaluate_all(model, test_loader, name="Test")
+    mlflow.log_metric("val_accuracy", val_acc)
+    mlflow.log_metric("test_accuracy", test_acc)
 
-# Logging parameter, metrik, dan model
-mlflow.log_param("source", "huggingface_pretrained")
+    input_example = pd.DataFrame([{"text": "Berita ini mengandung unsur penipuan dan hoaks."}])
+    mlflow.transformers.log_model(
+        transformers_model={"model": model, "tokenizer": tokenizer},
+        artifact_path="model",
+        input_example=input_example
+    )
 
-val_acc = evaluate_all(model, val_loader, name="Validation")
-test_acc = evaluate_all(model, test_loader, name="Test")
+    with open("last_run_id.txt", "w") as f:
+        f.write(run_id)
 
-mlflow.log_metric("val_accuracy", val_acc)
-mlflow.log_metric("test_accuracy", test_acc)
-
-input_example = pd.DataFrame([{"text": "Berita ini mengandung unsur penipuan dan hoaks."}])
-
-mlflow.transformers.log_model(
-    transformers_model={"model": model, "tokenizer": tokenizer},
-    artifact_path="model",
-    input_example=input_example
-)
-
-print("Model dan metrik berhasil dilog ke MLflow.")
-
-# Simpan run_id ke file
-with open("last_run_id.txt", "w") as f:
-    f.write(run_id)
+    print("Model dan metrik berhasil dilog ke MLflow.")
