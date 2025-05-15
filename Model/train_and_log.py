@@ -38,10 +38,10 @@ model.to(device)
 # Set experiment dan pastikan run aktif
 mlflow.set_experiment("HoaxDetection")
 
-if mlflow.active_run() is None:
-    mlflow.start_run()
-
 run = mlflow.active_run()
+if run is None:
+    run = mlflow.start_run()
+
 run_id = run.info.run_id
 
 mlflow.log_param("source", "huggingface_pretrained")
