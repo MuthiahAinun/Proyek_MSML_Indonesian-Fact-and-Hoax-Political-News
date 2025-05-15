@@ -44,8 +44,15 @@ jobs:
           conda activate hoax-env
           which mlflow
           mlflow run . --env-manager=local
-          RUN_ID=$(ls -td mlruns/0/* | head -1 | xargs -n 1 basename)
-          echo "$RUN_ID" > last_run_id.txt
+
+      - name: Debug output files
+        shell: bash
+        working-directory: Model
+        run: |
+          echo "List isi direktori Model:"
+          ls -lh
+          echo "Isi last_run_id.txt:"
+          cat last_run_id.txt
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
