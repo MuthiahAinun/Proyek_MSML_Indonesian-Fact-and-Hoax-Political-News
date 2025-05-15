@@ -42,50 +42,25 @@ model.to(device)
 # MLFlow Logging
 mlflow.set_experiment("HoaxDetection")
 
-active_run = mlflow.active_run()
+with mlflow.start_run() as run:
+    run_id = run.info.run_id
+    mlflow.log_param("source", "huggingface_pretrained")
 
-if active_run is None:
-    # Jika belum ada run, mulai run baru
-    with mlflow.start_run() as run:
-        run_id = run.info.run_id
-        mlflow.log_param("source", "huggingface_pretrained")
+    val_acc = evaluate_all(model, val_loader, name="Validation")
+    test_acc = evaluate_all(model, test_loader, name="Test")
+    mlflow.log_metric("val_accuracy", val_acc)
+    mlflow.log_metric("test_accuracy", test_acc)
 
-        val_acc = evaluate_all(model, val_loader, name="Validation")
-        test_acc = evaluate_all(model, test_loader, name="Test")
-        mlflow.log_metric("val_accuracy", val_acc)
-        mlflow.log_metric("test_accuracy", test_acc)
+    input_example = pd.DataFrame([{"text": "Berita ini mengandung unsur penipuan dan hoaks."}])
 
-        input_example = pd.DataFrame([{"text": "Berita ini mengandung unsur penipuan dan hoaks."}])
+    mlflow.transformers.log_model(
+        transformers_model={"model": model, "tokenizer": tokenizer},
+        artifact_path="model",
+        input_example=input_example
+    )
 
-        mlflow.transformers.log_model(
-            transformers_model={"model": model, "tokenizer": tokenizer},
-            artifact_path="model",
-            input_example=input_example
-        )
+    print("Model dan metrik berhasil dilog ke MLflow.")
 
-        print("Model dan metrik berhasil dilog ke MLflow.")
-
-else:
-    # Jika sudah ada run aktif, gunakan nested run supaya tidak bentrok
-    run_id = active_run.info.run_id
-    with mlflow.start_run(run_id=run_id, nested=True):
-        mlflow.log_param("source", "huggingface_pretrained")
-
-        val_acc = evaluate_all(model, val_loader, name="Validation")
-        test_acc = evaluate_all(model, test_loader, name="Test")
-        mlflow.log_metric("val_accuracy", val_acc)
-        mlflow.log_metric("test_accuracy", test_acc)
-
-        input_example = pd.DataFrame([{"text": "Berita ini mengandung unsur penipuan dan hoaks."}])
-
-        mlflow.transformers.log_model(
-            transformers_model={"model": model, "tokenizer": tokenizer},
-            artifact_path="model",
-            input_example=input_example
-        )
-
-        print("Model dan metrik berhasil dilog ke MLflow.")
-
-# Simpan run_id ke file (boleh di luar blok)
-with open("last_run_id.txt", "w") as f:
-    f.write(run_id)
+    # Simpan run_id ke file
+    with open("last_run_id.txt", "w") as f:
+        f.write(run_id)
