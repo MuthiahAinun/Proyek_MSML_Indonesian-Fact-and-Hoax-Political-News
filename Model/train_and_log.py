@@ -36,7 +36,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 model.to(device)
 
 # Mulai run baru
-with mlflow.start_run(nested=True) as run:
+with mlflow.start_run() as run:
     run_id = run.info.run_id
     print(f"Starting new run with ID: {run_id}")
     mlflow.log_param("source", "huggingface_pretrained")
