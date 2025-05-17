@@ -39,7 +39,7 @@ model.to(device)
 mlflow.set_experiment("hoax_detection_experiment")
 
 # Mulai run baru
-with mlflow.start_run() as run:
+with mlflow.start_run(nested=True) as run:
     run_id = run.info.run_id
     print(f"Starting new run with ID: {run_id}")
     mlflow.log_param("source", "huggingface_pretrained")
