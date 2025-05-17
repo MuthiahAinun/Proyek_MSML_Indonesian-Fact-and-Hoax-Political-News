@@ -94,10 +94,10 @@ jobs:
           name: run-id
           path: Model/run_id_info
 
-      - name: Read run ID
-        id: read_run
+      - name: Build Docker image from registered MLflow model
         run: |
-          echo "RUN_ID=$(cat Model/run_id_info/last_run_id.txt)" >> $GITHUB_ENV
+          mlflow models build-docker -m models:/hoax-distilbert-model/1 -n muthiah192/hoax-detector:latest
+
 
       - name: Build Docker image from MLflow model
         run: |
