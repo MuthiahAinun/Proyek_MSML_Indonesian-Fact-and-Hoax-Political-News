@@ -35,9 +35,6 @@ model = AutoModelForSequenceClassification.from_pretrained(model_name)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model.to(device)
 
-# Set experiment name secara eksplisit
-mlflow.set_experiment("hoax_detection_experiment")
-
 # Mulai run baru
 with mlflow.start_run(nested=True) as run:
     run_id = run.info.run_id
