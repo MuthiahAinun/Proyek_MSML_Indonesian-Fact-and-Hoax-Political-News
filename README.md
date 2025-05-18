@@ -58,7 +58,7 @@ Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News
 │ │ └── Eksperimen_MSML_Tsamarah_Muthiah_Abdullah.ipynb # Full notebook for preprocessing, training, and inference (Colab-based)
 │ │ └── automate_Tsamarah-Muthiah-Abdullah.py # Python script to automate preprocessing (used in preprocess.yml)
 │ │ └── dataset-cleaned.gz # Cleaned dataset exported from Colab
-│ │ └── dataset_cleaned.gz # Cleaned dataset generated automatically from GitHub workflow artifact
+│ │ └── dataset_cleaned_prepo.gz # Cleaned dataset generated automatically from Pipeline workflow artifact
 ```
 
 ---
@@ -79,7 +79,7 @@ The second step of this project involves running the **CI workflow file `ci.yaml
 - Evaluating the model on the dataset
 - Uploading MLflow artifacts
 - Building and pushing a Docker image to Docker Hub:  
-  🔗 [Docker Image - Hoax Exporter](https://hub.docker.com/r/muthiah192/hoax-exporter)
+  🔗 [Docker Image - Hoax Detector](https://hub.docker.com/r/muthiah192/hoax-detector/tags)
 
 📎 Artifact Example:  
 ![Model Artifact](Model/Artifak-Model.png)
@@ -93,7 +93,7 @@ The second step of this project involves running the **CI workflow file `ci.yaml
 ├── Model
 │ └── Artifak-MLFlow-Dagshub.png # Visual artifact Dagshub
 │ └── Artifak-Model.png # Visual artifact from CI workflow run
-│ └── Dashboard-Monitoring-Grafana-12-metrics.png # Grafana monitoring dashboard preview
+│ └── Mutiah_abdullah-Dashboard-Grafana.png # Grafana monitoring dashboard preview
 │ └── MLProject # MLflow project file to enable automated retraining
 │ └── URL_Docker_Image # File containing link to the generated Docker image
 │ └── URL_Model_Saved # File containing link to the saved Hugging Face model
@@ -101,7 +101,7 @@ The second step of this project involves running the **CI workflow file `ci.yaml
 │ └── conda.yaml # MLflow environment specification file (see below for description)
 │ └── modelling.py # Contains model architecture, dataset splitting, and tokenization logic
 │ └── train_and_log.py # Script to train the model, evaluate it, and log metrics to MLflow
-├── Dockerfile # Dockerfile to build the inference/exporter image
+| └── dataset_cleaned_prepo.gz # Cleaned dataset generated automatically from Pipeline workflow artifact
 ```
 
 ---
@@ -121,39 +121,37 @@ The second step of this project involves running the **CI workflow file `ci.yaml
 ### 📊 Model Evaluation Results
 
 #### ✅ **Validation Set Results**
-- **Accuracy**: 0.9970
+- **Accuracy**: 0.9985
 
 ```
-          precision    recall  f1-score   support
+              precision    recall  f1-score   support
 
-non-hoax       1.00      1.00      1.00      2090
-    hoax       0.99      1.00      0.99       584
+    non-hoax       1.00      1.00      1.00      2078
+        hoax       0.99      1.00      1.00       592
 
-accuracy                           1.00      2674
+    accuracy                           1.00      2670
+   macro avg       1.00      1.00      1.00      2670
+weighted avg       1.00      1.00      1.00      2670
 
-macro avg 0.99 1.00 1.00 2674
-weighted avg 1.00 1.00 1.00 2674
-
-Prediction distribution: Counter({0: 2086, 1: 584})
-Actual label distribution: Counter({0: 2090, 1: 584})
+Prediction distribution: Counter({0: 2074, 1: 596})
+Actual label distribution: Counter({0: 2078, 1: 592})
 ```
 
 #### ✅ **Test Set Results**
-- **Accuracy**: 0.9966
+- **Accuracy**: 0.9970
 
 ```
-          precision    recall  f1-score   support
+              precision    recall  f1-score   support
 
-non-hoax       1.00      1.00      1.00      2056
-    hoax       0.99      1.00      0.99       618
+    non-hoax       1.00      1.00      1.00      2110
+        hoax       0.99      1.00      0.99       561
 
-accuracy                           1.00      2674
+    accuracy                           1.00      2671
+   macro avg       0.99      1.00      1.00      2671
+weighted avg       1.00      1.00      1.00      2671
 
-macro avg 0.99 1.00 1.00 2674
-weighted avg 1.00 1.00 1.00 2674
-
-Prediction distribution: Counter({0: 2051, 1: 623})
-Actual label distribution: Counter({0: 2056, 1: 618})
+Prediction distribution: Counter({0: 2104, 1: 567})
+Actual label distribution: Counter({0: 2110, 1: 561})
 ```
 
 ---
@@ -205,33 +203,34 @@ In this step, we set up **monitoring and alerting** using **Prometheus and Grafa
 
 ```
 exporter:
-  image: muthiah192/hoax-exporter:latest
-  ports:
-    - "8000:8000"
-  restart: always
+    build:
+      context: ./Monitoring
+    ports:
+      - "8000:8000"
+    restart: always
 ```
-**Exporter:** Runs the Prometheus-compatible metrics endpoint from the prebuilt Docker image. It exposes metrics like accuracy, precision, and system resource usage on port 8000.
+**Exporter:** Exposes Prometheus-compatible metrics by running a Python exporter script, using evaluation results from the MLflow-built model. It exposes metrics like accuracy, precision, and system resource usage on port 8000.
 
 ---
 ```
 inference:
-  build:
-    context: "C:/Users/ACER NITRO V15/inference_service"
-  ports:
-    - "8001:8001"
-  restart: always
+    build:
+      context: ./inference_service
+    ports:
+      - "8001:8001"
+    restart: always
 ```
-**Inference:** Builds a Docker image from local files in the inference_service directory and serves inference results on port 8001.
+**Inference:** Builds a Docker image from the inference_service directory and serves real-time inference on port 8001 using the DistilBERT model loaded from Hugging Face.
 
 ---
 ```
 prometheus:
-  image: prom/prometheus:latest
-  volumes:
-    - "/c/Users/ACER NITRO V15/Monitoring/prometheus.yml:/etc/prometheus/prometheus.yml"
-  ports:
-    - "9090:9090"
-  restart: always
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    restart: always
 ```
 **Prometheus:** Collects metrics by scraping from the exporter. It reads its configuration from the prometheus.yml file and serves its dashboard on port 9090.
 
@@ -283,7 +282,7 @@ last_updated = Gauge('last_updated_timestamp', 'Timestamp of last metrics update
 Grafana dashboards are created using data sourced from Prometheus.
 
 **Sample dashboard:**
-![Dashboard Screenshot](Model/Dashboard-Monitoring-Grafana-12-metrics.png)
+![Dashboard Screenshot](Model/Mutiah_abdullah-Dashboard-Grafana.png)
 
 **Alerting Example:**
 
