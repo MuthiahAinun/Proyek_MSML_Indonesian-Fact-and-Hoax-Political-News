@@ -9,4 +9,4 @@ This project involves running the CI workflow file ci.yaml, which automates the 
 6. Evaluating the model on the dataset
 7. Uploading MLflow artifacts
 8. Building and pushing a Docker image to Docker Hub:
-🔗 Docker Image - Hoax Exporter : https://hub.docker.com/r/muthiah192/hoax-exporter
+🔗 Docker Image - Hoax Detector : https://hub.docker.com/r/muthiah192/hoax-detector/tags
