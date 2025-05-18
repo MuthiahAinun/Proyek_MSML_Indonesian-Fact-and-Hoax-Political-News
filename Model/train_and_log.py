@@ -52,6 +52,7 @@ with mlflow.start_run() as run:
     mlflow.transformers.log_model(
         transformers_model={"model": model, "tokenizer": tokenizer},
         artifact_path="model",
+        task="text-classification",
         input_example=input_example
     )
 
