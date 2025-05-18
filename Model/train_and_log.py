@@ -53,6 +53,11 @@ with mlflow.start_run() as run:
         transformers_model={"model": model, "tokenizer": tokenizer},
         artifact_path="model",
         task="text-classification",
+        pip_requirements=[
+        "torch",
+        "transformers",
+        "mlflow"
+        ],
         input_example=input_example
     )
 
