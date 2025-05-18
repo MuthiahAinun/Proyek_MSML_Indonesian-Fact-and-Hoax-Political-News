@@ -31,13 +31,13 @@ def set_metrics():
     recall_hoax.set(1.00)
     f1_hoax.set(0.99)
 
-    accuracy.set(0.9974)
+    accuracy.set(0.9970)
 
     cpu_usage.set(psutil.cpu_percent())
     memory_usage.set(psutil.virtual_memory().percent)
 
-    pred_non_hoax.set(2058)
-    pred_hoax.set(616)
+    pred_non_hoax.set(2104)
+    pred_hoax.set(567)
 
     last_updated.set(time.time())
 
