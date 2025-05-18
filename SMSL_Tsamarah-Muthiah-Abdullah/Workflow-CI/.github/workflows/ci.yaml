@@ -4,11 +4,8 @@ on:
   push:
     paths:
       - '.github/workflows/ci.yaml'
-      - 'Model/train_and_log.py'
-      - 'Model/modelling.py'
-      - 'Model/augment.py'  # augmentasi memicu CI
+      - 'Model/**'
       - 'requirements.txt'
-      - 'Dockerfile'
   workflow_dispatch:
 
 jobs:
@@ -19,25 +16,39 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Clean conda cache
+        run: conda clean -afy
+
+      - name: Set up Conda with Mambaforge and Create Environment
+        uses: conda-incubator/setup-miniconda@v2
         with:
+          environment-file: Model/conda.yaml
+          environment-name: hoax-env
+          activate-environment: hoax-env
           python-version: 3.9
+          use-mamba: true
+          auto-update-conda: true
+          auto-activate-base: false
 
-      - name: Install dependencies
+      - name: Run MLflow project using existing conda env
+        shell: bash
+        working-directory: Model
         run: |
-          pip install -r requirements.txt
-          pip install mlflow torch transformers scikit-learn pandas
-
-      - name: Run evaluation and log with MLflow
-        run: |
-          python Model/train_and_log.py
+          source $CONDA/etc/profile.d/conda.sh
+          conda activate hoax-env
+          mlflow run . --env-manager=local
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
         with:
           name: mlflow-artifacts
-          path: mlruns
+          path: Model/mlruns
+
+      - name: Upload last run ID
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-id
+          path: Model/last_run_id.txt
 
   build-and-push-docker:
     runs-on: ubuntu-latest
@@ -47,21 +58,46 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
 
-      - name: Login to DockerHub
+      - name: Install MLflow
+        run: pip install mlflow
+
+      - name: Download MLflow artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: mlflow-artifacts
+          path: Model/mlruns
+
+      - name: Download run ID file
+        uses: actions/download-artifact@v4
+        with:
+          name: run-id
+          path: Model/run_id_info
+
+      - name: Read RUN_ID from file
+        id: get-run-id
+        run: |
+          RUN_ID=$(cat Model/run_id_info/last_run_id.txt)
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+
+      - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push exporter image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile
-          push: true
-          tags: |
-            muthiah192/hoax-exporter:latest
-            muthiah192/hoax-exporter:${{ github.run_number }}
+      - name: Build Docker image from MLflow model
+        run: |
+          mlflow models build-docker \
+            -m Model/mlruns/0/${{ env.RUN_ID }}/artifacts/model \
+            -n muthiah192/hoax-detector:latest
+
+      - name: Push Docker image
+        run: |
+          docker tag muthiah192/hoax-detector:latest muthiah192/hoax-detector:${{ github.run_number }}
+          docker push muthiah192/hoax-detector:latest
+          docker push muthiah192/hoax-detector:${{ github.run_number }}
