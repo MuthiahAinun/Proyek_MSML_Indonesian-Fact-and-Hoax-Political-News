@@ -77,7 +77,7 @@ The second step of this project involves running the **CI workflow file `ci.yaml
 - Loading a **pre-trained model** from Hugging Face:  
   🔗 [Hugging Face Model - distilbert-hoax-classifier](https://huggingface.co/Muthiah192/distilbert-hoax-classifier/tree/main)
 - Evaluating the model on the dataset
-- Uploading MLflow artifacts
+- Uploading [MLflow artifacts](https://github.com/MuthiahAinun/Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News/actions/runs/15091138598)
 - Building and pushing a Docker image to Docker Hub:  
   🔗 [Docker Image - Hoax Detector](https://hub.docker.com/r/muthiah192/hoax-detector/tags)
 
