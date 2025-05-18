@@ -29,12 +29,6 @@ jobs:
           use-mamba: true
           auto-update-conda: true
           auto-activate-base: false
-          
-
-      - name: Debug - List Conda Environments
-        run: |
-          source "${CONDA}/etc/profile.d/conda.sh"
-          conda info --envs
 
       - name: Run MLflow project using existing conda env
         shell: bash
@@ -42,17 +36,7 @@ jobs:
         run: |
           source $CONDA/etc/profile.d/conda.sh
           conda activate hoax-env
-          which mlflow
           mlflow run . --env-manager=local
-
-      - name: Debug output files
-        shell: bash
-        working-directory: Model
-        run: |
-          echo "List isi direktori Model:"
-          ls -lh
-          echo "Isi last_run_id.txt:"
-          cat last_run_id.txt
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
@@ -94,20 +78,23 @@ jobs:
           name: run-id
           path: Model/run_id_info
 
-      - name: Build Docker image from registered MLflow model
+      - name: Read RUN_ID from file
+        id: get-run-id
         run: |
-          mlflow models build-docker -m models:/hoax-distilbert-model/1 -n muthiah192/hoax-detector:latest
-
-
-      - name: Build Docker image from MLflow model
-        run: |
-          mlflow models build-docker -m Model/mlruns/0/${{ env.RUN_ID }}/artifacts/model -n muthiah192/hoax-detector:latest
+          RUN_ID=$(cat Model/run_id_info/last_run_id.txt)
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker image from MLflow model
+        run: |
+          mlflow models build-docker \
+            -m Model/mlruns/0/${{ env.RUN_ID }}/artifacts/model \
+            -n muthiah192/hoax-detector:latest
 
       - name: Push Docker image
         run: |
