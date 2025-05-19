@@ -159,14 +159,17 @@ Actual label distribution: Counter({0: 2110, 1: 561})
 
 The **MLflow tracking artifacts** for this project have been successfully uploaded and integrated with **DagsHub**, and can be accessed at the following link:
 
-🔗 [View MLflow Experiments on DagsHub](https://dagshub.com/MuthiahAinun/distilbert-hoax-detection/experiments)
+🔗 [View MLflow Experiments on DagsHub](https://dagshub.com/MuthiahAinun/distilbert-hoax-detection/experiments#/experiment/m_22cb094d65bd46cf961ecc759175717c)
 
-### Logged Artifacts Include:
+### 📦 Logged Artifacts Include:
 
-- **`source`**: Indicates the origin of the model or inference process (from Hugging Face Muthiah192/distilbert-hoax-classifier).
-- **`test_accuracy`**: Accuracy of the model on the test dataset.
-- **`val_accuracy`**: Accuracy of the model on the validation dataset.
-- **`Log HF model as artifact`**:The DagsHub experiment `Log HF Model as Artifact` is designed to store the model artifact from Hugging Face, specifically the Muthiah192/distilbert-hoax-classifier.
+- **source**: Indicates that the model originates from Hugging Face (Muthiah192/distilbert-hoax-classifier).
+- **test_accuracy**: Accuracy of the model on the test dataset.
+- **val_accuracy**: Accuracy of the model on the validation dataset.
+- **batch_size**: 16 — the batch size used during training.
+- **data_path**: dataset_cleaned_prepo.gz — the preprocessed dataset file used for training.
+- **epoch**: 3 — the number of full training iterations (epochs).
+- **Model as artifact**: The trained DistilBERT model is fully stored under the model/ directory as an MLflow artifact.
 
 ![Dagshub Image - Hoax Detection](Model/MLFlow-Artifact-Dagshub.png)
   
