@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - main  
+      - main
   workflow_dispatch:
 
 jobs:
@@ -21,11 +21,6 @@ jobs:
 
     - name: Install MLflow
       run: pip install mlflow
-
-    - name: Download MLflow model artifact from DagsHub
-      run: |
-        curl -L "https://dagshub.com/MuthiahAinun/distilbert-hoax-detection.mlflow/artifacts/0/b0444424210e48c9a4f1c98188861c9d/artifacts/model.zip" --output model.zip
-        unzip model.zip -d mlflow_model
 
     - name: Build Docker Image from MLflow Model
       run: |
