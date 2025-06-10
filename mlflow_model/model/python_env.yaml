@@ -1,3 +1,7 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:69e8e099c0d696262ff0aec380f8c5b16b6901271bef4d061ba9eb6a43fcef50
-size 123
+python: 3.11.13
+build_dependencies:
+- pip==24.1.2
+- setuptools==75.2.0
+- wheel==0.45.1
+dependencies:
+- -r requirements.txt
