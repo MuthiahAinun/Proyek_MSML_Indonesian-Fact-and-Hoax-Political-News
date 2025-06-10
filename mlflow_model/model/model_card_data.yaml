@@ -1,3 +1,7 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:415dcc05bf7afec354a1a2f0b30ff63280cc524776855a47e44eb2346733e7c8
-size 135
+datasets:
+- wikipedia
+- id_newspapers_2018
+language: id
+license: mit
+widget:
+- text: ayahku sedang bekerja di sawah untuk [MASK] padi.
