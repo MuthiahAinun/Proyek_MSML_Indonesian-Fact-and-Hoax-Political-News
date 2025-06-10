@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - main
+      - main  # Ganti jika pakai branch lain
   workflow_dispatch:
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
     - name: Build Docker Image from MLflow Model
       run: |
         mlflow models build-docker \
-          -m mlflow_model/model \
+          -m $(pwd)/mlflow_model/model \
           -n distilbert-hoax-classifier
 
     - name: Log in to DockerHub
