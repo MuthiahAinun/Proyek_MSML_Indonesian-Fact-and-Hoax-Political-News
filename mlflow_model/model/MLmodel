@@ -1,3 +1,38 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:11f9bbd88e6ce7d2f71c59fb6d1b1eda4feeaa37081f63b1a84d2e9ec096b2c3
-size 1187
+artifact_path: model
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.transformers
+    python_version: 3.11.13
+  transformers:
+    code: null
+    components:
+    - tokenizer
+    framework: pt
+    instance_type: TextClassificationPipeline
+    model_binary: model
+    pipeline_model_type: DistilBertForSequenceClassification
+    source_model_name: cahya/distilbert-base-indonesian
+    task: text-classification
+    tokenizer_type: DistilBertTokenizerFast
+    torch_dtype: torch.float32
+    transformers_version: 4.52.4
+is_signature_from_type_hint: false
+mlflow_version: 2.22.1
+model_size_bytes: 273341007
+model_uuid: fad8d77238e7418cacce0e246a34a20f
+prompts: null
+run_id: b0444424210e48c9a4f1c98188861c9d
+saved_input_example_info:
+  artifact_path: input_example.json
+  serving_input_path: serving_input_example.json
+  type: json_object
+signature:
+  inputs: '[{"type": "string", "name": "text", "required": true}]'
+  outputs: '[{"type": "string", "name": "label", "required": true}, {"type": "double",
+    "name": "score", "required": true}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-06-10 07:18:29.694636'
