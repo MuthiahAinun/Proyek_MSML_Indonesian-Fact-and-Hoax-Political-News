@@ -6,7 +6,17 @@ entry_points:
   main:
     parameters:
       epochs: {type: int, default: 3}
-      batch_size: {type: int, default: 16}
+      batch_size: {type: int, default: 32}
       data_path: {type: str, default: "dataset_cleaned_prepo.gz"}
+      augment: {type: str, default: true}    
+
+      dagshub_token: {type: str}
+      hf_token: {type: str}
+      mlflow_uri: {type: str}
+      mlflow_user: {type: str}
+      mlflow_pass: {type: str}
+      github_repo: {type: str}
+      github_token: {type: str}
+      hf_repo_id: {type: str}
     command: >
-      python train_and_log.py --epochs {epochs} --batch_size {batch_size} --data-path {data_path}
+      python modelling.py --epochs {epochs} --batch_size {batch_size} --data-path {data_path} --augment {augment} --dagshub-token {dagshub_token} --hf-token {hf_token} --mlflow-uri {mlflow_uri} --mlflow-user {mlflow_user} --mlflow-pass {mlflow_pass} --github-repo {github_repo} --github-token {github_token} --hf-repo-id {hf_repo_id}
