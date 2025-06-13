@@ -7,3 +7,6 @@ In this stage, the complete model training and logging process is carried out in
   - Tagging and pushing the image to Docker Hub
 - Reference to the final Docker image:
   🔗 https://hub.docker.com/r/muthiah192/fact-hoax-classifier/tags
+
+The MLflow tracking artifacts for this project have been successfully uploaded and integrated with DagsHub, and can be accessed at the following link:
+🔗 https://dagshub.com/MuthiahAinun/distilbert-hoax-detection.mlflow/#/experiments/0/runs/b0444424210e48c9a4f1c98188861c9d/artifacts
