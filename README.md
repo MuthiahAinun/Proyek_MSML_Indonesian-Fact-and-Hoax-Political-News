@@ -97,7 +97,7 @@ The model is trained locally in **Google Colab** by running the following MLflow
 - Logging model parameters, metrics, and artifacts to **MLflow Tracking Server** and **DagsHub**
 - Saving and uploading the trained model to **Hugging Face Hub**
 
-🔗 [Hugging Face Model - distilbert-hoax-classifier](https://huggingface.co/Muthiah192/fact-hoax-classifications/tree/main)
+🔗 [Hugging Face Model - fact-hoax-classifier](https://huggingface.co/Muthiah192/fact-hoax-classifications/tree/main)
 
 ---
 ### 🛠️ Docker Image Build via GitHub Actions (`docker-build.yaml`)
