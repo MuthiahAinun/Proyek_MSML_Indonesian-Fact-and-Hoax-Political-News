@@ -26,7 +26,7 @@ jobs:
       run: |
         mlflow models build-docker \
           -m $(pwd)/mlflow_model/model \
-          -n distilbert-hoax-classifier
+          -n fact-hoax-classifier
 
     - name: Log in to DockerHub
       uses: docker/login-action@v3
