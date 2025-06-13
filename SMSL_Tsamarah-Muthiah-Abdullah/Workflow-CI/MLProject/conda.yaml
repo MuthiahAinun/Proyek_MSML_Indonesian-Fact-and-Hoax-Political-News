@@ -5,9 +5,19 @@ channels:
 dependencies:
   - python=3.9
   - pip
+  - ipykernel
+  - setuptools
+  - wheel
   - pip:
-      - torch
+      - torch       
       - transformers
       - pandas
       - scikit-learn
       - mlflow
+      - huggingface_hub
+      - fastapi
+      - uvicorn
+      - gunicorn
+      - protobuf<4.0.0  # Supaya kompatibel dengan beberapa paket
+      - python-dotenv  # Buat load file .env 
+      - requests       
