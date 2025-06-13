@@ -66,112 +66,98 @@ Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News
 > This setup ensures reproducibility and automation of the preprocessing phase, making it easier to integrate into continuous workflows and model training pipelines.
 
 ---
-### Step 2️⃣ : Running the CI Workflow (`ci.yaml`)
+### 🚀 Step 2️⃣ : Model Training on Colab using MLflow & Docker Build via GitHub CI
 
-The second step of this project involves running the **CI workflow file `ci.yaml`**, which automates the training and evaluation process. This workflow will trigger the execution of `train_and_log.py` and `modelling.py`. The key processes in this step include:
-
-- Performing **oversampling using Easy Data Augmentation (EDA)** to address class imbalance (minority class: `hoax == 1`)
-- Tokenizing the text data
-- Setting up PyTorch DataLoaders
-- Splitting the dataset into 80% training and 20% validation
-- Loading a **pre-trained model** from Hugging Face:  
-  🔗 [Hugging Face Model - distilbert-hoax-classifier](https://huggingface.co/Muthiah192/distilbert-hoax-classifier/tree/main)
-- Evaluating the model on the dataset
-- Uploading [MLflow artifacts](https://github.com/MuthiahAinun/Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News/actions/runs/15091138598)
-- Building and pushing a Docker image to Docker Hub:  
-  🔗 [Docker Image - Hoax Detector](https://hub.docker.com/r/muthiah192/hoax-detector/tags)
-
-📎 Artifact Example:  
-![Model Artifact](Model/Artifak-Model.png)
+In this stage, the complete model training and logging process is carried out in **Google Colab** using a **GPU** environment through **MLflow**, while the **Docker image** is automatically built using **GitHub Actions CI** to support efficient deployment automation.
 
 ---
 
+### 🧠 Model Training via Google Colab (GPU) using MLflow
+
+The model is trained locally in **Google Colab** by running the following MLflow command:
+
+```bash
+!mlflow run . \
+  --env-manager=local \
+  -P dagshub_token=$DAGSHUB_TOKEN \
+  -P hf_token=$HF_TOKEN \
+  -P mlflow_uri=$MLFLOW_TRACKING_URI \
+  -P mlflow_user=$MLFLOW_TRACKING_USERNAME \
+  -P mlflow_pass=$MLFLOW_TRACKING_PASSWORD \
+  -P github_repo=$GITHUB_REPO \
+  -P github_token=$GITHUB_TOKEN \
+  -P hf_repo_id=$HF_REPO_ID
+```
+
+📌 This command triggers the **MLflow Project** (`MLproject`) which performs the following steps:
+
+- Preprocessing and **text augmentation** using Easy Data Augmentation (EDA)
+- Text **tokenization**, dataset creation, and DataLoader setup
+- Fine-tuning the `distilbert-base-indonesian` model from Hugging Face for hoax classification
+- Logging model parameters, metrics, and artifacts to **MLflow Tracking Server** and **DagsHub**
+- Saving and uploading the trained model to **Hugging Face Hub**
+
+🔗 [Hugging Face Model - distilbert-hoax-classifier](https://huggingface.co/Muthiah192/fact-hoax-classifications/tree/main)
+
+---
+### 🛠️ Docker Image Build via GitHub Actions (`docker-build.yaml`)
+
+Once the model has been successfully trained and uploaded to Hugging Face, the next step is to **build a Docker image** using GitHub Actions CI. The docker-build.yaml workflow:
+
+- Pulls the trained model from the mlflow_model/model directory
+- Builds a **Docker image** using MLflow's built-in serving tools
+- Pushes the resulting Docker image to **Docker Hub**
+
+🔗 [Docker Image - Fact Hoax Classifier](https://hub.docker.com/r/muthiah192/fact-hoax-classifier/tags)
+
+---
 ### 📁 Folder Structure for Step 2
 ```
-├── .github/workflows Artifak-MLFlow-Dagshub.png
-│ └── ci.yaml # CI workflow file for model training and Docker image build
 ├── Model
-│ └── Artifak-MLFlow-Dagshub.png # Visual artifact Dagshub
-│ └── Artifak-Model.png # Visual artifact from CI workflow run
-│ └── Mutiah_abdullah-Dashboard-Grafana.png # Grafana monitoring dashboard preview
-│ └── MLProject # MLflow project file to enable automated retraining
-│ └── URL_Docker_Image # File containing link to the generated Docker image
-│ └── URL_Model_Saved # File containing link to the saved Hugging Face model
-│ └── augment.py # Script to perform text augmentation (EDA)
-│ └── conda.yaml # MLflow environment specification file (see below for description)
-│ └── modelling.py # Contains model architecture, dataset splitting, and tokenization logic
-│ └── train_and_log.py # Script to train the model, evaluate it, and log metrics to MLflow
-| └── dataset_cleaned_prepo.gz # Cleaned dataset generated automatically from Pipeline workflow artifact
+│   ├── Screenshoot-Artifact-Dagshub.png       # Visualization of artifacts on DagsHub
+│   ├── Screenshoot-Artifact-ModelCI.png       # Screenshot of CI workflow run
+│   ├── Mutiah_abdullah-Dashboard-Grafana.png  # Grafana monitoring dashboard preview
+│   ├── MLProject                               # MLflow project configuration file
+│   ├── URL_Docker_Image                        # File containing the Docker image link
+│   ├── URL_Model_Saved                         # File containing the Hugging Face model link
+│   ├── modelling.py                            # Handles tokenization, dataset splitting, and model architecture
+│   ├── train_and_log.py                        # Script for model training and MLflow logging
+│   └── dataset_cleaned_prepo.gz                # Cleaned dataset after preprocessing
+│   └── .env                                    # Environment variable file used during training on Colab via MLflow
 ```
-
 ---
-
-### 📄 File Descriptions
-
-- **`conda.yaml`**: Defines the environment for MLflow to ensure reproducibility. Includes dependencies such as `pytorch`, `transformers`, `scikit-learn`, and `mlflow`.
-- **`modelling.py`**: Contains the full training pipeline including:
-  - Easy Data Augmentation (EDA) for oversampling
-  - Tokenization using Hugging Face tokenizer
-  - Dataset creation and splitting
-  - Model architecture definition
-- **`train_and_log.py`**: Runs the training process, evaluates the model, and logs metrics and artifacts to MLflow. This script is invoked directly by the `ci.yaml` workflow.
-
----
-
-### 📊 Model Evaluation Results
-
-#### ✅ **Validation Set Results**
-- **Accuracy**: 0.9985
+### 📊 Validation Metrics
+| **Metric** | **Score** |
+| ---------- | --------- |
+| Accuracy   | 0.9988    |
+| Precision  | 0.9988    |
+| Recall     | 0.9988    |
+| F1-score   | 0.9988    |
 
 ```
               precision    recall  f1-score   support
 
-    non-hoax       1.00      1.00      1.00      2078
-        hoax       0.99      1.00      1.00       592
+           0       1.00      1.00      1.00      6293
+           1       1.00      1.00      1.00      1718
 
-    accuracy                           1.00      2670
-   macro avg       1.00      1.00      1.00      2670
-weighted avg       1.00      1.00      1.00      2670
-
-Prediction distribution: Counter({0: 2074, 1: 596})
-Actual label distribution: Counter({0: 2078, 1: 592})
-```
-
-#### ✅ **Test Set Results**
-- **Accuracy**: 0.9970
-
-```
-              precision    recall  f1-score   support
-
-    non-hoax       1.00      1.00      1.00      2110
-        hoax       0.99      1.00      0.99       561
-
-    accuracy                           1.00      2671
-   macro avg       0.99      1.00      1.00      2671
-weighted avg       1.00      1.00      1.00      2671
-
-Prediction distribution: Counter({0: 2104, 1: 567})
-Actual label distribution: Counter({0: 2110, 1: 561})
+    accuracy                           1.00      8011
+   macro avg       1.00      1.00      1.00      8011
+weighted avg       1.00      1.00      1.00      8011
 ```
 
 ---
-## 🎗️ MLflow Artifacts - DistilBERT Hoax Detection on DagsHub:
+## 🎗️ MLflow Artifacts - Fact Hoax Detection on DagsHub:
 
 The **MLflow tracking artifacts** for this project have been successfully uploaded and integrated with **DagsHub**, and can be accessed at the following link:
 
-🔗 [View MLflow Experiments on DagsHub](https://dagshub.com/MuthiahAinun/distilbert-hoax-detection/experiments#/experiment/m_22cb094d65bd46cf961ecc759175717c)
+🔗 [View MLflow Experiments on DagsHub](https://dagshub.com/MuthiahAinun/distilbert-hoax-detection.mlflow/#/experiments/0/runs/b0444424210e48c9a4f1c98188861c9d/artifacts)
 
-### 📦 Logged Artifacts Include:
 
-- **source**: Indicates that the model originates from Hugging Face (Muthiah192/distilbert-hoax-classifier).
-- **test_accuracy**: Accuracy of the model on the test dataset.
-- **val_accuracy**: Accuracy of the model on the validation dataset.
-- **batch_size**: 16 — the batch size used during training.
-- **data_path**: dataset_cleaned_prepo.gz — the preprocessed dataset file used for training.
-- **epoch**: 3 — the number of full training iterations (epochs).
-- **Model as artifact**: The trained DistilBERT model is fully stored under the model/ directory as an MLflow artifact.
+![Dagshub Image - Hoax Detection](Model/Screenshoot-Artifact-Dagshub.png)
 
-![Dagshub Image - Hoax Detection](Model/MLFlow-Artifact-Dagshub.png)
+Once the workflow runs successfully, the preprocessed dataset will be saved as an **artifact**.
+📎 ![Artifact Example:](Model/Screenshoot-Artifact-ModelCI.png)
+
   
 ---
 > This step is critical for ensuring model performance and deploying the result into a containerized environment for inference or monitoring purposes.
