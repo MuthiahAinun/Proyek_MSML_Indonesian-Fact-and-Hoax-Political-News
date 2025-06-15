@@ -1,15 +1,4 @@
-In this stage, the complete model training and logging process is carried out in Google Colab using a GPU environment through MLflow, while the Docker image is automatically built using GitHub Actions CI to support efficient deployment automation.
-
-- The name of the GitHub Actions workflow used (`docker-build.yaml`)
-- A summary of the steps performed in the CI process:
-  - Pulling the trained model from MLflow artifacts
-  - Building a Docker image using MLflow’s model packaging
-  - Tagging and pushing the image to Docker Hub
-- Reference to the final Docker image:
-  🔗 https://hub.docker.com/r/muthiah192/fact-hoax-classifier/tags
-
-The MLflow tracking artifacts for this project have been successfully uploaded and integrated with DagsHub, and can be accessed at the following link:
-🔗 https://dagshub.com/MuthiahAinun/distilbert-hoax-detection.mlflow/#/experiments/0/runs/b0444424210e48c9a4f1c98188861c9d/artifacts
+Link Artifact-Dagshub : https://dagshub.com/MuthiahAinun/distilbert-hoax-detection.mlflow/#/experiments/0/runs/6283d6e3994e4010960dc29b50414ace/artifacts
 
 Link Github CI-Process: https://github.com/MuthiahAinun/Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News/actions/runs/15662897520/job/44123188603
 Link Github CI-Artifact: https://github.com/MuthiahAinun/Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News/actions/runs/15662897520
