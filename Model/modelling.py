@@ -77,6 +77,7 @@ def train_and_log_model():
     ])
 
     with mlflow.start_run():
+        print(f"Run with ID '{run.info.run_id}'")
         pipeline.fit(X_train, y_train)
         preds = pipeline.predict(X_test)
 
