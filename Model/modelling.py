@@ -1,4 +1,5 @@
 # modelling.py
+
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
@@ -11,9 +12,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import random
 import re
-import joblib
-from dotenv import load_dotenv
 from mlflow.models.signature import infer_signature
+from mlflow.tracking import MlflowClient
 
 # -------------------------------
 # DATA AUGMENTATION (EDA)
@@ -64,7 +64,7 @@ def load_and_augment_dataset(path, augment=True, num_aug=2):
     return pd.DataFrame({'text': texts, 'label': labels})
 
 # -------------------------------
-# LOAD CONFIG
+# TRAINING & LOGGING
 # -------------------------------
 def train_and_log_model():
     df = load_and_augment_dataset("dataset_cleaned_prepo.gz", augment=True, num_aug=2)
@@ -78,10 +78,13 @@ def train_and_log_model():
     ])
 
     with mlflow.start_run() as run:
-        print(f"Run with ID '{run.info.run_id}'")
+        run_id = run.info.run_id
+        print(f"\n🟢 Run with ID '{run_id}'")
+
         pipeline.fit(X_train, y_train)
         preds = pipeline.predict(X_test)
 
+        # Metrics
         acc = accuracy_score(y_test, preds)
         precision = precision_score(y_test, preds, average='weighted', zero_division=0)
         recall = recall_score(y_test, preds, average='weighted', zero_division=0)
@@ -94,17 +97,27 @@ def train_and_log_model():
         mlflow.log_metric("recall", recall)
         mlflow.log_metric("f1_score", f1)
 
-        input_example = pd.DataFrame(X_test[:1])  # 1 baris text
+        # Signature & model logging
+        input_example = pd.DataFrame(X_test[:1])
         output_example = pipeline.predict(input_example)
         signature = infer_signature(input_example, output_example)
 
         mlflow.sklearn.log_model(
-        sk_model=pipeline,
-        artifact_path="rf_model",
-        signature=signature,
-        input_example=input_example
+            sk_model=pipeline,
+            artifact_path="rf_model",
+            signature=signature,
+            input_example=input_example
         )
 
+        print("✅ Model logged under artifact path: rf_model")
+
+        # Cek lokasi artifact URI dengan MlflowClient
+        client = MlflowClient()
+        run_info = client.get_run(run_id)
+        artifact_uri = run_info.info.artifact_uri
+        print(f"📦 Artifact URI: {artifact_uri}/rf_model")
+
+        # Tambahan logging
         report = classification_report(y_test, preds)
         with open("classification_report.txt", "w") as f:
             f.write(report)
@@ -120,7 +133,7 @@ def train_and_log_model():
         plt.savefig("confusion_matrix.png")
         mlflow.log_artifact("confusion_matrix.png")
 
-        print("\n✅ Training selesai dan model dicatat ke DagsHub.")
+        print("✅ Training selesai dan model dicatat ke MLflow / DagsHub.")
 
 if __name__ == '__main__':
     train_and_log_model()
