@@ -1,0 +1,18 @@
+# Inference service dependencies
+fastapi
+uvicorn
+scikit-learn
+joblib
+pandas
+numpy
+
+# Monitoring exporter dependencies
+prometheus-client
+psutil
+
+# Optional (kalau pakai classification_report parser, misalnya)
+matplotlib
+seaborn
+
+# MLflow only if needed during inference (not mandatory if already saved)
+mlflow
