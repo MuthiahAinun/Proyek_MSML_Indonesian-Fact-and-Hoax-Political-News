@@ -45,7 +45,7 @@ jobs:
         shell: micromamba-shell {0}
         run: |
           echo "Building Docker image from local saved model..."
-          mlflow models build-docker -m rf_model_local -n rf-hoax-model
+          mlflow models build-docker -m Model/rf_model_local -n rf-hoax-model
 
       - name: Log in to DockerHub
         uses: docker/login-action@v2
