@@ -1,23 +1,16 @@
-name: hoax-env
+# conda.yaml
+name: rf_hoax_env
 channels:
   - defaults
   - conda-forge
 dependencies:
-  - python=3.9
+  - python=3.10
   - pip
-  - ipykernel
-  - setuptools
-  - wheel
   - pip:
-      - torch       
-      - transformers
       - pandas
       - scikit-learn
+      - matplotlib
+      - seaborn
       - mlflow
-      - huggingface_hub
-      - fastapi
-      - uvicorn
-      - gunicorn
-      - protobuf<4.0.0  # Supaya kompatibel dengan beberapa paket
-      - python-dotenv  # Buat load file .env 
-      - requests       
+      - python-dotenv
+      - joblib
