@@ -24,6 +24,7 @@ jobs:
         with:
           auto-update-conda: true
           auto-activate-base: true
+          channels: conda-forge
 
       - name: Install MLflow
         run: |
@@ -32,7 +33,7 @@ jobs:
 
       - name: Run MLflow project (train and log)
         run: |
-          mlflow run Model
+          mlflow run Model --env-manager=local
 
       - name: Build Docker image
         run: |
