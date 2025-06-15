@@ -30,14 +30,16 @@ jobs:
           MLFLOW_TRACKING_USERNAME: ${{ secrets.MLFLOW_TRACKING_USERNAME }}
           MLFLOW_TRACKING_PASSWORD: ${{ secrets.MLFLOW_TRACKING_PASSWORD }}
         run: |
-          mlflow run Model/ --env-manager=local
-          RUN_ID=$(cat run_id.txt)
-          echo "MLFLOW_RUN_ID=$RUN_ID" >> $GITHUB_ENV
+          python - <<EOF
+          import mlflow
+          run = mlflow.run("Model/", env_manager="local")
+          with open("run_id.txt", "w") as f:
+              f.write(run.run_id)
+          EOF
 
-      - name: Debug artifact folder
+      - name: Export Run ID to environment
         run: |
-          set -x
-          ls -R mlruns
+          echo "MLFLOW_RUN_ID=$(cat run_id.txt)" >> $GITHUB_ENV
 
       - name: Build Docker image
         shell: micromamba-shell {0}
