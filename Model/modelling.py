@@ -102,13 +102,17 @@ def train_and_log_model():
         output_example = pipeline.predict(input_example)
         signature = infer_signature(input_example, output_example)
 
-        mlflow.sklearn.log_model(
+        # Simpan model ke lokal
+        local_model_path = "rf_model_local"
+        mlflow.sklearn.save_model(
         sk_model=pipeline,
-        artifact_path="rf_model",
+        path=local_model_path,
         signature=signature,
-        input_example=input_example,
-        registered_model_name=None
+        input_example=input_example
         )
+
+        # Log folder model ke MLflow (DagsHub) sebagai artifact biasa
+        mlflow.log_artifacts(local_model_path, artifact_path="rf_model")
 
         print("✅ Model logged under artifact path: rf_model")
 
