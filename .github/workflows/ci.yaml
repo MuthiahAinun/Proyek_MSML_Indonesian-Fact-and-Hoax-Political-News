@@ -19,12 +19,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Set up Miniconda
-        uses: conda-incubator/setup-miniconda@v2
+      - name: Setup micromamba
+        uses: mamba-org/setup-micromamba@v1
         with:
-          auto-update-conda: true
-          auto-activate-base: true
-          channels: conda-forge
+          environment-file: Model/conda.yaml
+          environment-name: rf_hoax_env
+          init-shell: bash
+          cache-downloads: true
+          cache-environment: true
 
       - name: Install MLflow CLI
         run: |
