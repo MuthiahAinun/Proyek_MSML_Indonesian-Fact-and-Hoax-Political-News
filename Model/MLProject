@@ -1,8 +1,8 @@
-# MLProject
-name: rf_hoax_detection
+name: rf-ci-model
 
 conda_env: conda.yaml
 
 entry_points:
   main:
-    command: "python modelling.py"
+    parameters: {}
+    command: python modelling.py
