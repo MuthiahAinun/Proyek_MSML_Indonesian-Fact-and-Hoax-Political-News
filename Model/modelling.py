@@ -65,10 +65,6 @@ def load_and_augment_dataset(path, augment=True, num_aug=2):
 # -------------------------------
 # LOAD CONFIG
 # -------------------------------
-load_dotenv()
-os.environ["MLFLOW_TRACKING_USERNAME"] = os.getenv("MLFLOW_TRACKING_USERNAME")
-os.environ["MLFLOW_TRACKING_PASSWORD"] = os.getenv("MLFLOW_TRACKING_PASSWORD")
-mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
 mlflow.set_experiment("RF_CI_RemoteLog")
 
 def train_and_log_model():
