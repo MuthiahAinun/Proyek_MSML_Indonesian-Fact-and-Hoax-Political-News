@@ -100,7 +100,7 @@ def train_and_log_model():
 
         mlflow.sklearn.log_model(
         sk_model=pipeline,
-        artifact_path="model",
+        artifact_path="rf_model",
         signature=signature,
         input_example=input_example
         )
