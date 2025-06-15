@@ -133,6 +133,10 @@ def train_and_log_model():
         plt.savefig("confusion_matrix.png")
         mlflow.log_artifact("confusion_matrix.png")
 
+        with open("run_id.txt", "w") as f:
+            f.write(run_id)
+        mlflow.log_artifact("run_id.txt")
+
         print("✅ Training selesai dan model dicatat ke MLflow / DagsHub.")
 
 if __name__ == '__main__':
