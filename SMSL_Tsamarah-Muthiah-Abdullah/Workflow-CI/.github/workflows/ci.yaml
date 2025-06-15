@@ -1,0 +1,65 @@
+name: Train and Deploy RF Hoax Model
+
+on:
+  push:
+    paths:
+      - 'Model/**'
+      - '.github/workflows/**'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup micromamba
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-file: Model/conda.yaml
+          environment-name: rf_hoax_env
+          init-shell: bash
+          cache-downloads: true
+          cache-environment: true
+
+      - name: Run MLflow project (train and log)
+        shell: micromamba-shell {0}
+        env:
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+          MLFLOW_TRACKING_USERNAME: ${{ secrets.MLFLOW_TRACKING_USERNAME }}
+          MLFLOW_TRACKING_PASSWORD: ${{ secrets.MLFLOW_TRACKING_PASSWORD }}
+        run: |
+          python - <<EOF
+          import mlflow
+          run = mlflow.run("Model/", env_manager="local")
+          with open("run_id.txt", "w") as f:
+              f.write(run.run_id)
+          EOF
+
+      - name: Export Run ID to environment
+        run: |
+          echo "MLFLOW_RUN_ID=$(cat run_id.txt)" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        shell: micromamba-shell {0}
+        run: |
+          echo "Building Docker image from local saved model..."
+          mlflow models build-docker -m Model/rf_model_local -n rf-hoax-model
+
+      - name: Upload trained model artifact to GitHub
+        uses: actions/upload-artifact@v4
+        with:
+          name: rf_model_local_artifact
+          path: Model/rf_model_local
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Docker image
+        run: |
+          docker tag rf-hoax-model ${{ secrets.DOCKERHUB_USERNAME }}/rf-hoax-model:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/rf-hoax-model:latest
