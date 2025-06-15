@@ -1,19 +1,14 @@
-# .github/workflows/ci.yaml
-name: Train and Deploy RF Model
+name: Train and Deploy RF Hoax Model
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
+    paths:
+      - 'Model/**'
+      - '.github/workflows/**'
 
 jobs:
-  build-train-log:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    env:
-      MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
-      MLFLOW_TRACKING_USERNAME: ${{ secrets.MLFLOW_TRACKING_USERNAME }}
-      MLFLOW_TRACKING_PASSWORD: ${{ secrets.MLFLOW_TRACKING_PASSWORD }}
-      DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
 
     steps:
       - name: Checkout repo
@@ -28,17 +23,13 @@ jobs:
           cache-downloads: true
           cache-environment: true
 
-      - name: Install MLflow CLI
-        run: |
-          conda install -y pip
-          pip install mlflow
-
       - name: Run MLflow project (train and log)
         shell: micromamba-shell {0}
         run: |
-          mlflow run Model
+          mlflow run Model/ --env-manager=local
 
       - name: Build Docker image
+        shell: micromamba-shell {0}
         run: |
           mlflow models build-docker -m mlruns/0/*/artifacts/rf_model -n rf-hoax-model
 
