@@ -31,9 +31,8 @@ jobs:
           MLFLOW_TRACKING_PASSWORD: ${{ secrets.MLFLOW_TRACKING_PASSWORD }}
         run: |
           mlflow run Model/ --env-manager=local
-          # Download semua artifacts dari run terakhir
-          LAST_RUN_ID=$(mlflow runs list -l 1 --experiment-id 0 | awk 'NR==2 {print $1}')
-          echo "MLFLOW_RUN_ID=$LAST_RUN_ID" >> $GITHUB_ENV
+          RUN_ID=$(cat run_id.txt)
+          echo "MLFLOW_RUN_ID=$RUN_ID" >> $GITHUB_ENV
 
       - name: Debug artifact folder
         run: |
