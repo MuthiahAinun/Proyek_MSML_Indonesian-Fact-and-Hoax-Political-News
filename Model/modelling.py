@@ -65,8 +65,6 @@ def load_and_augment_dataset(path, augment=True, num_aug=2):
 # -------------------------------
 # LOAD CONFIG
 # -------------------------------
-mlflow.set_experiment("RF_CI_RemoteLog")
-
 def train_and_log_model():
     df = load_and_augment_dataset("dataset_cleaned_prepo.gz", augment=True, num_aug=2)
     X = df["text"]
