@@ -35,7 +35,7 @@ jobs:
 
       - name: Run MLflow project (train and log)
         run: |
-          mlflow run Model --env-manager=local
+          mlflow run Model
 
       - name: Build Docker image
         run: |
