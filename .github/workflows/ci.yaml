@@ -34,6 +34,7 @@ jobs:
           pip install mlflow
 
       - name: Run MLflow project (train and log)
+        shell: micromamba-shell {0}
         run: |
           mlflow run Model
 
