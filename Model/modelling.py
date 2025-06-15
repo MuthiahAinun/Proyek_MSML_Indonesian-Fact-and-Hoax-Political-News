@@ -98,13 +98,14 @@ def train_and_log_model():
         mlflow.log_metric("f1_score", f1)
 
         # Signature & model logging
-        input_example = pd.DataFrame(X_test[:1])
-        output_example = pipeline.predict(input_example)
+        input_example = {"text": "Ini contoh teks berita hoaks"}
+        output_example = pipeline(input_example)
         signature = infer_signature(input_example, output_example)
 
         mlflow.sklearn.log_model(
             sk_model=pipeline,
             artifact_path="rf_model",
+            task="text-classification",
             signature=signature,
             input_example=input_example
         )
