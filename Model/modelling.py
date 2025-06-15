@@ -13,6 +13,7 @@ import random
 import re
 import joblib
 from dotenv import load_dotenv
+from mlflow.models.signature import infer_signature
 
 # -------------------------------
 # DATA AUGMENTATION (EDA)
@@ -93,12 +94,16 @@ def train_and_log_model():
         mlflow.log_metric("recall", recall)
         mlflow.log_metric("f1_score", f1)
 
-        joblib.dump(pipeline, "rf_model.pkl")
-        mlflow.log_artifact("rf_model.pkl")
+        input_example = pd.DataFrame(X_test[:1])  # 1 baris text
+        output_example = pipeline.predict(input_example)
+        signature = infer_signature(input_example, output_example)
 
-        input_example = pd.DataFrame(X_test[:1])
-        input_example.to_csv("input_example.csv", index=False)
-        mlflow.log_artifact("input_example.csv")
+        mlflow.sklearn.log_model(
+        sk_model=pipeline,
+        artifact_path="model",
+        signature=signature,
+        input_example=input_example
+        )
 
         report = classification_report(y_test, preds)
         with open("classification_report.txt", "w") as f:
