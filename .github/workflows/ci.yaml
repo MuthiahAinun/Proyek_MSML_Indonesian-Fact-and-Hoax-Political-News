@@ -25,17 +25,20 @@ jobs:
 
       - name: Run MLflow project (train and log)
         shell: micromamba-shell {0}
-        run: |
-          mlflow run Model/ --env-manager=local
-
-      - name: Build Docker image
-        shell: micromamba-shell {0}
         env:
           MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
           MLFLOW_TRACKING_USERNAME: ${{ secrets.MLFLOW_TRACKING_USERNAME }}
           MLFLOW_TRACKING_PASSWORD: ${{ secrets.MLFLOW_TRACKING_PASSWORD }}
         run: |
-          mlflow models build-docker -m mlruns/0/*/artifacts/rf_model -n rf-hoax-model
+          mlflow run Model/ --env-manager=local > mlflow_run_log.txt
+          RUN_ID=$(grep -oP "(?<=Run with ID ')[^']+" mlflow_run_log.txt)
+          echo "MLFLOW_RUN_ID=$RUN_ID" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        shell: micromamba-shell {0}
+        run: |
+          echo "Using Run ID: $MLFLOW_RUN_ID"
+          mlflow models build-docker -m mlruns/0/$MLFLOW_RUN_ID/artifacts/rf_model -n rf-hoax-model
 
       - name: Log in to DockerHub
         uses: docker/login-action@v2
