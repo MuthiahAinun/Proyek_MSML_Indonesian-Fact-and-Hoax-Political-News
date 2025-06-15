@@ -106,7 +106,8 @@ def train_and_log_model():
         sk_model=pipeline,
         artifact_path="rf_model",
         signature=signature,
-        input_example=input_example
+        input_example=input_example,
+        registered_model_name=None
         )
 
         print("✅ Model logged under artifact path: rf_model")
