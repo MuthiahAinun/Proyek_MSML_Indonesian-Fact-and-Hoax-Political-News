@@ -306,7 +306,7 @@ volumes:
 
 
 **Sample dashboard:**
-![Dashboard Screenshot](../Model/Screenshot-Dashboard-Muthiah-Tsamarah-Grafana.png)
+![Dashboard Screenshot](../Model/Screenshot-Dashboard-Muthiah_abdullah.png)
 
 **Alerting Example:**
 
