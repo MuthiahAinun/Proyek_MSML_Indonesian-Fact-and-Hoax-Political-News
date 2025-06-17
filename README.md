@@ -100,7 +100,7 @@ Artifact output and full logs are available here:
 
 - [MLflow UI artifacts](https://dagshub.com/MuthiahAinun/distilbert-hoax-detection.mlflow/#/experiments/0/runs/6283d6e3994e4010960dc29b50414ace)
 
-- [MLflow UI](Model/Screenshoot-Artifact-MLFLow-CI.png)
+![MLflow UI](Model/Screenshoot-Artifact-MLFLow-CI.png)
 
 ![MLflow Artifacts on DagsHub](Model/Screenshoot-tampilan-dagshub.png)
 
