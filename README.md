@@ -309,7 +309,7 @@ volumes:
 
 **Alerting Example:**
 
-An alert rule is triggered if accuracy drops below 2%, and Grafana sends a notification to the configured email.
+An alert rule for `CPU_usage` is triggered if accuracy drops **above 2%**, and Grafana sends a notification to the configured email.
 
 ![Alert Rule Example](Monitoring/Bukti%20Alerting%20Grafana/Rules_CPU_usage.png)
 
