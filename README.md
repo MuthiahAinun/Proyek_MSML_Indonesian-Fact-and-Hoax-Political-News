@@ -102,8 +102,6 @@ Artifact output and full logs are available here:
 
 ![MLflow UI](Model/Screenshoot-Artifact-MLFLow-CI.png)
 
-![MLflow Artifacts on DagsHub](Model/Screenshoot-tampilan-dagshub.png)
-
 ---
 ### 🐳 Docker Image Build via GitHub Actions `(mlflow models build-docker)`
 
