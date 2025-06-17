@@ -163,7 +163,8 @@ The **MLflow tracking artifacts** for this project have been successfully upload
 
 🔗 [View MLflow Experiments on DagsHub](https://dagshub.com/MuthiahAinun/distilbert-hoax-detection.mlflow/#/experiments/0/runs/6283d6e3994e4010960dc29b50414ace/artifacts)
 
-![Dagshub Image - Hoax Detection](Model/Screenshoot-tampilan-dagshub.png)  
+![Dagshub Image - Hoax Detection](../Model/Screenshoot-tampilan-dagshub.png)  
+
 ---
 > ✅ This CI-driven automation ensures consistent training, tracking, and deployable packaging — making the model ready for serving, inference, and further monitoring in production environments.
 ---
