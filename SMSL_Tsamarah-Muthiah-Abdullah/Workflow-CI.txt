@@ -1,6 +1,1 @@
-In this stage, the complete training and deployment pipeline is executed automatically through GitHub Actions CI. The model is trained using MLflow Projects and all training artifacts (including metrics, plots, and the model itself) are logged to DagsHub MLflow Tracking. Once training is complete, a Docker image is built and pushed to Docker Hub for deployment purposes.
-
-Link Artifact-Dagshub: https://dagshub.com/MuthiahAinun/distilbert-hoax-detection.mlflow/#/experiments/0/runs/6283d6e3994e4010960dc29b50414ace/artifacts
-Link Github CI-Process: https://github.com/MuthiahAinun/Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News/actions/runs/15662897520/job/44123188603
-Link Github CI-Artifact: https://github.com/MuthiahAinun/Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News/actions/runs/15662897520
-Link Image Docker: https://hub.docker.com/r/muthiah192/rf-hoax-model/tags 
+https://github.com/MuthiahAinun/Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News/tree/main/SMSL_Tsamarah-Muthiah-Abdullah/Workflow-CI
