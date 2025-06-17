@@ -37,7 +37,7 @@ The first step in the process is **preprocessing the four datasets**. Simply tri
 
 Once the workflow runs successfully, the **preprocessed dataset will be saved as an artifact**, which can be downloaded directly from the [GitHub Actions interface](https://github.com/MuthiahAinun/Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News/actions/runs/15024307645).  
 📎 Artifact Example:  
-![Preprocessing Artifact](Experiment/preprocessing/Artifak-Preprocessing.png)
+![Preprocessing Artifact](../Experiment/preprocessing/Artifak-Preprocessing.png)
 
 ---
 
