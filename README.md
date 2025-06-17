@@ -111,7 +111,7 @@ The image is then pushed to Docker Hub:
 - ✅ Automatically tagged as latest
 - ✅ Built from the saved model at Model/rf_model_local
 
-🔗 [Docker Hub - RF Hoax Mode](https://hub.docker.com/r/muthiah192/rf-hoax-model/tags)
+🔗 [Docker Hub - RF Hoax Model](https://hub.docker.com/r/muthiah192/rf-hoax-model/tags)
 
 ![Docker Image - RF Hoax Model](Model/Screenshot-Tampilan-Image-Docker.png)
 
