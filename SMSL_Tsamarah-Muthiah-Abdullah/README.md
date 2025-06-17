@@ -93,14 +93,14 @@ This workflow automatically performs:
 [GitHub Actions Artifact](https://github.com/MuthiahAinun/Proyek_MSML_Indonesian-Fact-and-Hoax-Political-News/actions/runs/15662897520)
 
 Artifact output and full logs are available here:
-🔗 ![GitHub Actions Artifact](Model/Screenshoot-Artifact-Github.png)
+🔗 ![GitHub Actions Artifact](../Model/Screenshoot-Artifact-Github.png)
 
 
 📊 Example of MLflow tracking UI after CI execution:
 
 - [MLflow UI artifacts](https://dagshub.com/MuthiahAinun/distilbert-hoax-detection.mlflow/#/experiments/0/runs/6283d6e3994e4010960dc29b50414ace)
 
-![MLflow UI](Model/Screenshoot-Artifact-MLFLow-CI.png)
+![MLflow UI](../Model/Screenshoot-Artifact-MLFLow-CI.png)
 
 ---
 ### 🐳 Docker Image Build via GitHub Actions `(mlflow models build-docker)`
@@ -113,7 +113,7 @@ The image is then pushed to Docker Hub:
 
 🔗 [Docker Hub - RF Hoax Model](https://hub.docker.com/r/muthiah192/rf-hoax-model/tags)
 
-![Docker Image - RF Hoax Model](Model/Screenshot-Tampilan-Image-Docker.png)
+![Docker Image - RF Hoax Model](../Model/Screenshot-Tampilan-Image-Docker.png)
 
 ---
 ### 📁 Folder Structure for Step 2
@@ -305,15 +305,15 @@ volumes:
 
 
 **Sample dashboard:**
-![Dashboard Screenshot](Model/Screenshot-Dashboard-Muthiah-Tsamarah-Grafana.png)
+![Dashboard Screenshot](../Model/Screenshot-Dashboard-Muthiah-Tsamarah-Grafana.png)
 
 **Alerting Example:**
 
 An alert rule for `CPU_usage` is triggered if accuracy drops **above 2%**, and Grafana sends a notification to the configured email.
 
-![Alert Rule Example](Monitoring/Bukti%20Alerting%20Grafana/Rules_CPU_usage.png)
+![Alert Rule Example](../Monitoring/Bukti%20Alerting%20Grafana/Rules_CPU_usage.png)
 
-![Email Notification Example](Monitoring/Bukti%20Alerting%20Grafana/Notifikasi_CPU-Usage.jpg)
+![Email Notification Example](../Monitoring/Bukti%20Alerting%20Grafana/Notifikasi_CPU-Usage.jpg)
 
 ---
 ## 🧪 Inference Testing
@@ -322,11 +322,11 @@ You can perform inference directly from the running Docker container.
 
 Example hoax inference result:
 
-![Hoax Result](inference_service/Screenshot-Inference-Hoax.png)
+![Hoax Result](../inference_service/Screenshot-Inference-Hoax.png)
 
 Example non-hoax inference result:
 
-![Non-hoax Result](inference_service/Screenshot-Inference-Non-Hoax.png)
+![Non-hoax Result](../inference_service/Screenshot-Inference-Non-Hoax.png)
 
 ---
 ## 📁 Folder Structure for Monitoring and Inference
