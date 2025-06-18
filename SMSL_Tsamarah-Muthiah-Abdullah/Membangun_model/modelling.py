@@ -3,20 +3,16 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import classification_report, accuracy_score, confusion_matrix, precision_score, recall_score, f1_score
+from sklearn.metrics import classification_report
 import mlflow
+import mlflow.sklearn
 from dotenv import load_dotenv
 import os
-import matplotlib.pyplot as plt
-import seaborn as sns
+
+
 import random
 import re
-import joblib
-import json
 
-# -------------------------------
-# DATA AUGMENTATION (EDA)
-# -------------------------------
 def random_deletion(words, p=0.1):
     if len(words) == 1:
         return words
@@ -49,10 +45,13 @@ def eda(text, num_aug=2):
     return augmented
 
 def load_and_augment_dataset(path, augment=True, num_aug=2):
+    import pandas as pd
     df = pd.read_csv(path, compression='infer')
     df['label'] = df['label'].astype(int)
+
     if not augment:
         return df
+
     texts, labels = [], []
     for _, row in df.iterrows():
         texts.append(row['text'])
@@ -60,29 +59,21 @@ def load_and_augment_dataset(path, augment=True, num_aug=2):
         for aug in eda(row['text'], num_aug=num_aug):
             texts.append(aug)
             labels.append(row['label'])
+
     return pd.DataFrame({'text': texts, 'label': labels})
 
-# -------------------------------
-# LOAD DAGS HUB CONFIG
-# -------------------------------
+
 load_dotenv()
-os.environ["MLFLOW_TRACKING_USERNAME"] = "MuthiahAinun"
-os.environ["MLFLOW_TRACKING_PASSWORD"] = os.getenv("DAGSHUB_TOKEN") or "c29306a62821557ec9c222d438968d591422741a"
+mlflow.set_tracking_uri("file:./mlruns")
+mlflow.set_experiment("RF_Local_AutoLog")
+mlflow.sklearn.autolog()
 
-mlflow.set_tracking_uri("https://dagshub.com/MuthiahAinun/distilbert-hoax-detection.mlflow")
-mlflow.set_experiment("RF_CI_RemoteLog")
-
-# -------------------------------
-# DATA LOAD & SPLIT
-# -------------------------------
 df = load_and_augment_dataset("dataset_cleaned_prepo.gz", augment=True, num_aug=2)
 X = df["text"]
 y = df["label"]
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.2)
 
-# -------------------------------
-# PIPELINE & TRAIN
-# -------------------------------
 pipeline = Pipeline([
     ('tfidf', TfidfVectorizer(max_features=1000)),
     ('rf', RandomForestClassifier(n_estimators=100, random_state=42))
@@ -92,36 +83,16 @@ with mlflow.start_run():
     pipeline.fit(X_train, y_train)
     preds = pipeline.predict(X_test)
 
-    # METRICS
-    acc = accuracy_score(y_test, preds)
-    precision = precision_score(y_test, preds, average='weighted', zero_division=0)
-    recall = recall_score(y_test, preds, average='weighted', zero_division=0)
-    f1 = f1_score(y_test, preds, average='weighted', zero_division=0)
+    from sklearn.metrics import classification_report, confusion_matrix
+    import matplotlib.pyplot as plt
+    import seaborn as sns
 
-    # LOG PARAMS & METRICS
-    mlflow.log_param("n_estimators", 100)
-    mlflow.log_param("vectorizer", "tfidf-1000")
-    mlflow.log_metric("accuracy", acc)
-    mlflow.log_metric("precision", precision)
-    mlflow.log_metric("recall", recall)
-    mlflow.log_metric("f1_score", f1)
-
-    # SAVE MODEL MANUALLY
-    joblib.dump(pipeline, "rf_model.pkl")
-    mlflow.log_artifact("rf_model.pkl")
-
-    # INPUT EXAMPLE + SIGNATURE (OPTIONAL - as artifact only)
-    input_example = pd.DataFrame(X_test[:1])
-    input_example.to_csv("input_example.csv", index=False)
-    mlflow.log_artifact("input_example.csv")
-
-    # CLASSIFICATION REPORT
     report = classification_report(y_test, preds)
+    print(report)
     with open("classification_report.txt", "w") as f:
         f.write(report)
     mlflow.log_artifact("classification_report.txt")
 
-    # CONFUSION MATRIX
     cm = confusion_matrix(y_test, preds)
     plt.figure(figsize=(6, 4))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
@@ -131,5 +102,3 @@ with mlflow.start_run():
     plt.tight_layout()
     plt.savefig("confusion_matrix.png")
     mlflow.log_artifact("confusion_matrix.png")
-
-    print("✅ Training selesai dan model dicatat ke DagsHub (tanpa log_model error).")
